@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Document Vault — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #1a0f0a;
+    --burgundy: #6b1f1f;
+    --burgundy-light: #8b2e2e;
+    --gold: #c49a3c;
+    --gold-light: #e8c97e;
+    --cream: #f8f3eb;
+    --cream-dark: #ede5d4;
+    --muted: #8a7060;
+    --border: #d4c4a8;
+    --white: #ffffff;
+  }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    color: var(--ink);
+  }
+
+  /* NAV */
+  nav {
+    background: var(--burgundy);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(26,15,10,0.2);
+  }
+
+  .nav-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--gold-light);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-brand svg { width: 18px; height: 18px; fill: var(--gold-light); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nav-user {
+    font-size: 13px;
+    color: rgba(232,201,126,0.7);
+    font-weight: 300;
+  }
+
+  .nav-user strong { color: var(--gold-light); font-weight: 500; }
+
+  .btn-nav {
+    padding: 7px 18px;
+    border: 1px solid rgba(232,201,126,0.3);
+    background: transparent;
+    color: var(--gold-light);
+    border-radius: 1px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .btn-nav:hover { background: rgba(232,201,126,0.1); border-color: var(--gold-light); }
+  .btn-nav.admin { background: rgba(196,154,60,0.15); }
+
+  /* MAIN */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  .page-header {
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .page-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .page-header p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  .doc-count {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--cream-dark);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  /* DOC GRID */
+  .doc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .doc-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 24px;
+    transition: box-shadow 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .doc-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--burgundy), var(--gold));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .doc-card:hover {
+    box-shadow: 0 4px 24px rgba(26,15,10,0.10);
+    transform: translateY(-2px);
+  }
+
+  .doc-card:hover::before { opacity: 1; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .doc-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, #fdf0f0, #fce8e8);
+    border: 1px solid #f0d0d0;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+    font-size: 18px;
+  }
+
+  .doc-type-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--burgundy);
+    background: rgba(107,31,31,0.07);
+    padding: 3px 8px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+
+  .doc-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .doc-date {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+
+  .doc-actions { display: flex; gap: 8px; }
+
+  .btn-doc {
+    flex: 1;
+    padding: 8px;
+    border-radius: 1px;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+    background: var(--cream);
+    color: var(--ink);
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .btn-doc:hover { background: var(--cream-dark); border-color: var(--muted); }
+
+  .btn-doc.primary {
+    background: var(--burgundy);
+    color: var(--gold-light);
+    border-color: var(--burgundy);
+  }
+  .btn-doc.primary:hover { background: var(--burgundy-light); }
+
+  .btn-doc.danger { color: #8b1f1f; }
+  .btn-doc.danger:hover { background: #fdf0f0; border-color: #e0a0a0; color: #8b1f1f; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--muted);
+  }
+
+  .empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
+  .empty-state h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+  .empty-state p { font-size: 14px; font-weight: 300; }
+
+  /* LOADING */
+  .loading {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 60px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 300;
+  }
+
+  .spinner {
+    display: inline-block; width: 28px; height: 28px;
+    border: 2px solid var(--border);
+    border-top-color: var(--burgundy);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+    display: block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    padding: 12px 20px;
+    border-radius: 2px;
+    font-size: 13px;
+    font-weight: 400;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    transform: translateY(80px);
+    transition: transform 0.3s ease;
+  }
+  .toast.show { transform: translateY(0); }
+  .toast.success { background: var(--ink); color: var(--gold-light); }
+  .toast.error { background: #8b1f1f; color: #fff; }
+
+  /* Admin delete button only shows on hover */
+  .btn-doc.danger { display: none; }
+  .doc-card:hover .btn-doc.danger { display: flex; }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 16px; }
+    main { padding: 24px 16px; }
+    .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+    Family Vault
+  </div>
+  <div class="nav-right">
+    <span class="nav-user">Hello, <strong id="navUsername">—</strong></span>
+    <a href="/upload" class="btn-nav admin" id="adminLink" style="display:none">Upload Doc</a>
+    <button class="btn-nav" onclick="logout()">Sign Out</button>
+  </div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <div>
+      <h2>Family Documents</h2>
+      <p>All files are encrypted and stored securely</p>
+    </div>
+    <span class="doc-count" id="docCount">Loading…</span>
+  </div>
+
+  <div class="doc-grid" id="docGrid">
+    <div class="loading">
+      <div class="spinner"></div>
+      Loading documents…
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DOC_TYPE_ICONS = {
+  'Property': '🏠', 'Insurance': '🛡️', 'Passport': '🛂',
+  'Identity': '🪪', 'Medical': '⚕️', 'Financial': '💼',
+  'Legal': '⚖️', 'Vehicle': '🚗', 'Other': '📄',
+};
+
+let isAdmin = false;
+
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+}
+
+async function loadUser() {
+  try {
+    const r = await fetch('/api/auth/me');
+    if (!r.ok) { window.location.href = '/'; return; }
+    const u = await r.json();
+    document.getElementById('navUsername').textContent = u.username || u.email;
+    isAdmin = u.is_admin;
+    if (isAdmin) document.getElementById('adminLink').style.display = '';
+  } catch { window.location.href = '/'; }
+}
+
+async function loadDocuments() {
+  try {
+    const r = await fetch('/api/documents');
+    if (!r.ok) { window.location.href = '/'; return; }
+    const data = await r.json();
+
+    const docCount = document.getElementById('docCount');
+    docCount.textContent = `${data.count} / ${data.limit} documents`;
+
+    const grid = document.getElementById('docGrid');
+    if (!data.documents || data.documents.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📂</div>
+          <h3>No documents yet</h3>
+          <p>The admin hasn't uploaded any documents yet.</p>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = data.documents.map((doc, i) => {
+      const icon = DOC_TYPE_ICONS[doc.document_type] || '📄';
+      const deleteBtn = isAdmin
+        ? `<button class="btn-doc danger" onclick="deleteDoc('${doc.id}', this)" title="Delete">🗑️ Delete</button>`
+        : '';
+      return `
+        <div class="doc-card" style="animation-delay:${i*0.07}s">
+          <div class="doc-icon">${icon}</div>
+          <span class="doc-type-badge">${doc.document_type || 'Document'}</span>
+          <div class="doc-title">${escapeHtml(doc.title)}</div>
+          <div class="doc-date">Added ${formatDate(doc.uploaded_at)}</div>
+          <div class="doc-actions">
+            <a class="btn-doc primary" href="/api/get_document/${doc.id}" target="_blank">
+              📖 View PDF
+            </a>
+            <a class="btn-doc" href="/api/get_document/${doc.id}" download>
+              ⬇ Save
+            </a>
+            ${deleteBtn}
+          </div>
+        </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('docGrid').innerHTML =
+      `<div class="loading" style="color:#8b1f1f">Failed to load documents. Please refresh.</div>`;
+  }
+}
+
+async function deleteDoc(id, btn) {
+  if (!confirm('Permanently delete this document?')) return;
+  btn.disabled = true;
+  try {
+    const r = await fetch(`/api/documents/${id}`, {method:'DELETE'});
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail);
+    showToast('Document deleted.');
+    loadDocuments();
+  } catch(e) {
+    showToast(e.message, 'error');
+    btn.disabled = false;
+  }
+}
+
+async function logout() {
+  await fetch('/api/auth/logout', {method:'POST'});
+  window.location.href = '/';
+}
+
+function escapeHtml(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Init
+loadUser().then(loadDocuments);
+</script>
+</body>
+</html>

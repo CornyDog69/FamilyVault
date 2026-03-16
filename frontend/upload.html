@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Document Vault — Upload</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #1a0f0a;
+    --burgundy: #6b1f1f;
+    --burgundy-light: #8b2e2e;
+    --gold: #c49a3c;
+    --gold-light: #e8c97e;
+    --cream: #f8f3eb;
+    --cream-dark: #ede5d4;
+    --muted: #8a7060;
+    --border: #d4c4a8;
+  }
+
+  body { font-family: 'Jost', sans-serif; background: var(--cream); min-height: 100vh; color: var(--ink); }
+
+  nav {
+    background: var(--burgundy);
+    padding: 0 32px;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(26,15,10,0.2);
+  }
+  .nav-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; color: var(--gold-light);
+    font-weight: 600; display: flex; align-items: center; gap: 10px;
+  }
+  .nav-brand svg { width: 18px; height: 18px; fill: var(--gold-light); }
+  .btn-nav {
+    padding: 7px 18px; border: 1px solid rgba(232,201,126,0.3);
+    background: transparent; color: var(--gold-light); border-radius: 1px;
+    font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .btn-nav:hover { background: rgba(232,201,126,0.1); }
+
+  main { max-width: 600px; margin: 0 auto; padding: 48px 24px; }
+
+  .page-header {
+    margin-bottom: 36px; padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px; font-weight: 600; color: var(--ink);
+  }
+  .page-header p { font-size: 13px; color: var(--muted); margin-top: 6px; font-weight: 300; }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 36px;
+    box-shadow: 0 2px 16px rgba(26,15,10,0.06);
+  }
+
+  .field { margin-bottom: 20px; }
+
+  label {
+    display: block; font-size: 11px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 7px;
+  }
+
+  input, select {
+    width: 100%; padding: 12px 14px;
+    border: 1px solid var(--border); border-radius: 1px;
+    background: var(--cream); font-family: 'Jost', sans-serif;
+    font-size: 15px; color: var(--ink);
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+  }
+  input:focus, select:focus {
+    border-color: var(--burgundy); background: #fff;
+    box-shadow: 0 0 0 3px rgba(107,31,31,0.07);
+  }
+  select { cursor: pointer; }
+
+  /* DROP ZONE */
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 2px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--cream);
+    position: relative;
+  }
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--burgundy);
+    background: rgba(107,31,31,0.03);
+  }
+  .drop-zone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer;
+    width: 100%; height: 100%;
+  }
+  .drop-icon { font-size: 32px; margin-bottom: 10px; }
+  .drop-text { font-size: 14px; color: var(--muted); font-weight: 300; }
+  .drop-text strong { color: var(--burgundy); font-weight: 500; }
+  .drop-hint { font-size: 11px; color: #b4a090; margin-top: 6px; }
+
+  .file-preview {
+    display: none;
+    padding: 12px 16px;
+    background: var(--cream-dark);
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    font-size: 13px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .file-preview { display: none; }
+  .file-preview.show { display: flex; }
+
+  .btn {
+    width: 100%; padding: 14px;
+    background: var(--burgundy); color: var(--gold-light);
+    border: none; border-radius: 1px;
+    font-family: 'Jost', sans-serif; font-size: 13px;
+    font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s; margin-top: 8px;
+  }
+  .btn:hover { background: var(--burgundy-light); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .msg {
+    padding: 12px 16px; border-radius: 1px;
+    font-size: 13px; margin-bottom: 20px; display: none;
+  }
+  .msg.error { background:#fdf0f0; color:#8b1f1f; border:1px solid #f0c4c4; display:block; }
+  .msg.success { background:#f0fdf4; color:#1a5c2e; border:1px solid #c4ecd0; display:block; }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--cream-dark);
+    border-radius: 2px;
+    margin-top: 16px;
+    overflow: hidden;
+    display: none;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--burgundy), var(--gold));
+    border-radius: 2px;
+    width: 0;
+    transition: width 0.4s ease;
+  }
+  .progress-bar.show { display: block; }
+
+  .doc-limit {
+    font-size: 12px; color: var(--muted);
+    background: var(--cream-dark); border: 1px solid var(--border);
+    padding: 8px 14px; border-radius: 1px; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(232,201,126,0.3);
+    border-top-color: var(--gold-light); border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle; margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .admin-notice {
+    background: rgba(107,31,31,0.05);
+    border: 1px solid rgba(107,31,31,0.15);
+    border-left: 3px solid var(--burgundy);
+    padding: 10px 14px;
+    border-radius: 0 1px 1px 0;
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 24px;
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-brand">
+    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+    Family Vault
+  </div>
+  <div style="display:flex;gap:12px">
+    <a href="/dashboard" class="btn-nav">← Dashboard</a>
+    <button class="btn-nav" onclick="logout()">Sign Out</button>
+  </div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <h2>Upload Document</h2>
+    <p>Files are encrypted with AES-256 before being stored on the server</p>
+  </div>
+
+  <div class="admin-notice" id="adminNotice" style="display:none">
+    🔐 You are uploading as <strong id="adminEmail"></strong>
+  </div>
+
+  <div class="doc-limit" id="docLimitBar">
+    <span>📁</span>
+    <span id="limitText">Loading document count…</span>
+  </div>
+
+  <div id="msgBox" class="msg"></div>
+
+  <div class="card">
+    <div class="field">
+      <label>Document Title</label>
+      <input type="text" id="titleInput" placeholder="e.g. Home Insurance Policy 2024" maxlength="100">
+    </div>
+
+    <div class="field">
+      <label>Document Type</label>
+      <select id="typeInput">
+        <option value="">— Select type —</option>
+        <option>Property</option>
+        <option>Insurance</option>
+        <option>Passport</option>
+        <option>Identity</option>
+        <option>Medical</option>
+        <option>Financial</option>
+        <option>Legal</option>
+        <option>Vehicle</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>PDF File</label>
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept=".pdf" onchange="fileSelected(this)">
+        <div class="drop-icon">📄</div>
+        <div class="drop-text"><strong>Click to choose</strong> or drag & drop</div>
+        <div class="drop-hint">PDF only · Max 20 MB</div>
+      </div>
+      <div class="file-preview" id="filePreview">
+        <span>📄</span>
+        <span id="fileName"></span>
+        <span id="fileSize" style="color:var(--muted);font-size:11px;margin-left:auto"></span>
+      </div>
+    </div>
+
+    <button class="btn" id="uploadBtn" onclick="uploadDocument()">
+      🔒 Encrypt &amp; Upload
+    </button>
+    <div class="progress-bar" id="progressBar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+function showMsg(text, type='error') {
+  const box = document.getElementById('msgBox');
+  box.textContent = text;
+  box.className = 'msg ' + type;
+}
+
+function fileSelected(input) {
+  const f = input.files[0];
+  if (!f) return;
+  if (!f.name.toLowerCase().endsWith('.pdf')) {
+    showMsg('Only PDF files are accepted.');
+    input.value = '';
+    return;
+  }
+  if (f.size > 20 * 1024 * 1024) {
+    showMsg('File too large. Maximum 20 MB.');
+    input.value = '';
+    return;
+  }
+  const preview = document.getElementById('filePreview');
+  document.getElementById('fileName').textContent = f.name;
+  document.getElementById('fileSize').textContent = (f.size/1024/1024).toFixed(2) + ' MB';
+  preview.classList.add('show');
+}
+
+// Drag & drop styling
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('dragover'); });
+
+async function uploadDocument() {
+  const title = document.getElementById('titleInput').value.trim();
+  const type = document.getElementById('typeInput').value;
+  const fileInput = document.getElementById('fileInput');
+  const file = fileInput.files[0];
+
+  if (!title) return showMsg('Please enter a document title.');
+  if (!type) return showMsg('Please select a document type.');
+  if (!file) return showMsg('Please select a PDF file.');
+
+  const btn = document.getElementById('uploadBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Encrypting & Uploading…';
+
+  const bar = document.getElementById('progressBar');
+  const fill = document.getElementById('progressFill');
+  bar.classList.add('show');
+  fill.style.width = '30%';
+
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('document_type', type);
+  formData.append('file', file);
+
+  try {
+    fill.style.width = '60%';
+    const r = await fetch('/api/upload-document', {method:'POST', body: formData});
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail || 'Upload failed');
+    fill.style.width = '100%';
+    showMsg('✅ ' + d.message, 'success');
+    // Reset form
+    document.getElementById('titleInput').value = '';
+    document.getElementById('typeInput').value = '';
+    fileInput.value = '';
+    document.getElementById('filePreview').classList.remove('show');
+    loadDocCount();
+  } catch(e) {
+    showMsg(e.message);
+    fill.style.width = '0';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🔒 Encrypt &amp; Upload';
+    setTimeout(() => bar.classList.remove('show'), 2000);
+  }
+}
+
+async function loadDocCount() {
+  try {
+    const r = await fetch('/api/documents');
+    if (!r.ok) return;
+    const d = await r.json();
+    document.getElementById('limitText').textContent =
+      `${d.count} of ${d.limit} documents used`;
+    if (d.count >= d.limit) {
+      document.getElementById('limitText').textContent += ' — LIMIT REACHED';
+      document.getElementById('uploadBtn').disabled = true;
+    }
+  } catch {}
+}
+
+async function checkAdmin() {
+  try {
+    const r = await fetch('/api/auth/me');
+    if (!r.ok) { window.location.href = '/'; return; }
+    const u = await r.json();
+    if (!u.is_admin) {
+      document.body.innerHTML = '<div style="text-align:center;padding:100px;font-family:sans-serif;color:#6b1f1f"><h2>Access Denied</h2><p>Admin only page.</p><a href="/dashboard">← Back</a></div>';
+      return;
+    }
+    const notice = document.getElementById('adminNotice');
+    document.getElementById('adminEmail').textContent = u.email;
+    notice.style.display = '';
+  } catch { window.location.href = '/'; }
+}
+
+async function logout() {
+  await fetch('/api/auth/logout', {method:'POST'});
+  window.location.href = '/';
+}
+
+checkAdmin();
+loadDocCount();
+</script>
+</body>
+</html>
