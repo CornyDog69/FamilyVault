@@ -3,196 +3,366 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Family Document Vault — Upload</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Family Vault — Upload</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
-    --ink: #1a0f0a;
-    --burgundy: #6b1f1f;
-    --burgundy-light: #8b2e2e;
-    --gold: #c49a3c;
-    --gold-light: #e8c97e;
-    --cream: #f8f3eb;
-    --cream-dark: #ede5d4;
-    --muted: #8a7060;
-    --border: #d4c4a8;
+    --black: #0a0a0a;
+    --white: #f5f0e8;
+    --yellow: #FFE500;
+    --red: #FF2D2D;
+    --blue: #1a1aff;
+    --green: #00CC66;
+    --border: 3px solid var(--black);
+    --shadow: 5px 5px 0px var(--black);
+    --shadow-sm: 3px 3px 0px var(--black);
+    --shadow-lg: 8px 8px 0px var(--black);
   }
 
-  body { font-family: 'Jost', sans-serif; background: var(--cream); min-height: 100vh; color: var(--ink); }
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--white);
+    min-height: 100vh;
+    color: var(--black);
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(var(--black) 1px, transparent 1px),
+      linear-gradient(90deg, var(--black) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.04;
+    z-index: 0;
+    pointer-events: none;
+  }
 
   nav {
-    background: var(--burgundy);
+    background: var(--black);
+    border-bottom: var(--border);
     padding: 0 32px;
-    height: 60px;
+    height: 64px;
     display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 2px 12px rgba(26,15,10,0.2);
+    position: sticky; top: 0; z-index: 50;
   }
-  .nav-brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px; color: var(--gold-light);
-    font-weight: 600; display: flex; align-items: center; gap: 10px;
-  }
-  .nav-brand svg { width: 18px; height: 18px; fill: var(--gold-light); }
-  .btn-nav {
-    padding: 7px 18px; border: 1px solid rgba(232,201,126,0.3);
-    background: transparent; color: var(--gold-light); border-radius: 1px;
-    font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
-    text-decoration: none; transition: all 0.2s;
-  }
-  .btn-nav:hover { background: rgba(232,201,126,0.1); }
 
-  main { max-width: 600px; margin: 0 auto; padding: 48px 24px; }
+  .nav-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px; color: var(--yellow);
+    letter-spacing: 0.06em;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .nav-brand-icon {
+    width: 34px; height: 34px;
+    background: var(--yellow);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  .btn-nav {
+    padding: 7px 16px;
+    border: 2px solid rgba(245,240,232,0.3);
+    background: transparent; color: var(--white);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none; transition: all 0.15s;
+  }
+  .btn-nav:hover { background: rgba(245,240,232,0.1); border-color: var(--white); }
+
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 48px 24px;
+    position: relative; z-index: 1;
+  }
 
   .page-header {
-    margin-bottom: 36px; padding-bottom: 20px;
-    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
   }
+
   h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 30px; font-weight: 600; color: var(--ink);
-  }
-  .page-header p { font-size: 13px; color: var(--muted); margin-top: 6px; font-weight: 300; }
-
-  .card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 36px;
-    box-shadow: 0 2px 16px rgba(26,15,10,0.06);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px; color: var(--black);
+    letter-spacing: 0.03em; line-height: 1;
   }
 
-  .field { margin-bottom: 20px; }
-
-  label {
-    display: block; font-size: 11px; font-weight: 500;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 7px;
+  h2 span {
+    display: inline-block;
+    background: var(--red);
+    color: var(--white);
+    padding: 0 10px;
+    border: 2px solid var(--black);
+    margin-left: 4px;
   }
 
-  input, select {
-    width: 100%; padding: 12px 14px;
-    border: 1px solid var(--border); border-radius: 1px;
-    background: var(--cream); font-family: 'Jost', sans-serif;
-    font-size: 15px; color: var(--ink);
-    transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+  .page-header p {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: #666;
+    letter-spacing: 0.06em; margin-top: 8px;
   }
-  input:focus, select:focus {
-    border-color: var(--burgundy); background: #fff;
-    box-shadow: 0 0 0 3px rgba(107,31,31,0.07);
-  }
-  select { cursor: pointer; }
 
-  /* DROP ZONE */
-  .drop-zone {
-    border: 2px dashed var(--border);
-    border-radius: 2px;
-    padding: 40px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: var(--cream);
-    position: relative;
-  }
-  .drop-zone:hover, .drop-zone.dragover {
-    border-color: var(--burgundy);
-    background: rgba(107,31,31,0.03);
-  }
-  .drop-zone input[type=file] {
-    position: absolute; inset: 0; opacity: 0; cursor: pointer;
-    width: 100%; height: 100%;
-  }
-  .drop-icon { font-size: 32px; margin-bottom: 10px; }
-  .drop-text { font-size: 14px; color: var(--muted); font-weight: 300; }
-  .drop-text strong { color: var(--burgundy); font-weight: 500; }
-  .drop-hint { font-size: 11px; color: #b4a090; margin-top: 6px; }
-
-  .file-preview {
-    display: none;
+  /* ADMIN NOTICE */
+  .admin-notice {
+    border: var(--border);
+    background: var(--yellow);
     padding: 12px 16px;
-    background: var(--cream-dark);
-    border: 1px solid var(--border);
-    border-radius: 1px;
-    font-size: 13px;
-    color: var(--ink);
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
-  .file-preview { display: none; }
-  .file-preview.show { display: flex; }
 
-  .btn {
-    width: 100%; padding: 14px;
-    background: var(--burgundy); color: var(--gold-light);
-    border: none; border-radius: 1px;
-    font-family: 'Jost', sans-serif; font-size: 13px;
-    font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.2s; margin-top: 8px;
+  /* DOC LIMIT BAR */
+  .doc-limit {
+    border: var(--border);
+    background: var(--black);
+    color: var(--yellow);
+    padding: 10px 16px;
+    margin-bottom: 28px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-sm);
   }
-  .btn:hover { background: var(--burgundy-light); }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .msg {
-    padding: 12px 16px; border-radius: 1px;
-    font-size: 13px; margin-bottom: 20px; display: none;
-  }
-  .msg.error { background:#fdf0f0; color:#8b1f1f; border:1px solid #f0c4c4; display:block; }
-  .msg.success { background:#f0fdf4; color:#1a5c2e; border:1px solid #c4ecd0; display:block; }
-
-  .progress-bar {
-    height: 3px;
-    background: var(--cream-dark);
-    border-radius: 2px;
-    margin-top: 16px;
+  .limit-bar-track {
+    width: 120px;
+    height: 8px;
+    background: rgba(245,240,232,0.15);
+    border: 1.5px solid rgba(245,240,232,0.3);
+    position: relative;
     overflow: hidden;
-    display: none;
   }
+
+  .limit-bar-fill {
+    position: absolute;
+    top: 0; left: 0; height: 100%;
+    background: var(--yellow);
+    transition: width 0.5s ease;
+  }
+
+  /* MESSAGE */
+  .msg {
+    padding: 12px 16px;
+    border: var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: none;
+    letter-spacing: 0.04em;
+  }
+  .msg.error { background: var(--red); color: var(--white); display: block; box-shadow: var(--shadow-sm); }
+  .msg.success { background: var(--green); color: var(--black); display: block; box-shadow: var(--shadow-sm); }
+
+  /* CARD */
+  .card {
+    background: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .card-header-strip {
+    background: var(--black);
+    padding: 14px 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--yellow);
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-body {
+    padding: 28px 24px;
+  }
+
+  .field { margin-bottom: 22px; }
+
+  label {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--black); margin-bottom: 7px;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 13px 14px;
+    border: var(--border);
+    background: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; font-weight: 500;
+    color: var(--black); outline: none;
+    transition: box-shadow 0.15s;
+    appearance: none;
+  }
+
+  input:focus, select:focus {
+    box-shadow: var(--shadow);
+    background: #fff;
+  }
+
+  input::placeholder { color: #aaa; font-weight: 400; }
+
+  .select-wrapper {
+    position: relative;
+  }
+  .select-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 14px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    pointer-events: none;
+    color: var(--black);
+  }
+
+  /* DROP ZONE */
+  .drop-zone {
+    border: var(--border);
+    border-style: dashed;
+    padding: 48px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--white);
+    position: relative;
+  }
+
+  .drop-zone:hover, .drop-zone.dragover {
+    background: var(--yellow);
+    border-style: solid;
+    box-shadow: var(--shadow);
+  }
+
+  .drop-zone input[type=file] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer;
+    width: 100%; height: 100%;
+  }
+
+  .drop-icon {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .drop-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--black);
+  }
+
+  .drop-hint {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: #888;
+    margin-top: 6px;
+    letter-spacing: 0.06em;
+  }
+
+  .file-preview {
+    display: none;
+    border: var(--border);
+    background: var(--black);
+    color: var(--yellow);
+    padding: 12px 16px;
+    margin-top: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+  }
+  .file-preview.show { display: flex; }
+  .file-size { margin-left: auto; opacity: 0.6; font-size: 10px; }
+
+  /* UPLOAD BUTTON */
+  .btn-upload {
+    width: 100%;
+    padding: 18px;
+    background: var(--black);
+    color: var(--yellow);
+    border: var(--border);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: var(--shadow);
+    margin-top: 8px;
+  }
+
+  .btn-upload:hover { box-shadow: var(--shadow-lg); transform: translate(-3px,-3px); }
+  .btn-upload:active { box-shadow: 2px 2px 0 var(--black); transform: translate(3px,3px); }
+  .btn-upload:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: var(--shadow); }
+
+  /* PROGRESS */
+  .progress-wrap {
+    border: var(--border);
+    height: 16px;
+    margin-top: 16px;
+    display: none;
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .progress-wrap.show { display: block; }
+
   .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--burgundy), var(--gold));
-    border-radius: 2px;
+    background: repeating-linear-gradient(
+      45deg,
+      var(--yellow) 0px,
+      var(--yellow) 8px,
+      var(--black) 8px,
+      var(--black) 16px
+    );
     width: 0;
     transition: width 0.4s ease;
   }
-  .progress-bar.show { display: block; }
-
-  .doc-limit {
-    font-size: 12px; color: var(--muted);
-    background: var(--cream-dark); border: 1px solid var(--border);
-    padding: 8px 14px; border-radius: 1px; margin-bottom: 24px;
-    display: flex; align-items: center; gap: 6px;
-  }
 
   .spinner {
-    display: inline-block; width: 14px; height: 14px;
-    border: 2px solid rgba(232,201,126,0.3);
-    border-top-color: var(--gold-light); border-radius: 50%;
+    display: inline-block; width: 16px; height: 16px;
+    border: 3px solid rgba(255,229,0,0.3);
+    border-top-color: var(--yellow);
+    border-radius: 50%;
     animation: spin 0.7s linear infinite;
-    vertical-align: middle; margin-right: 6px;
+    vertical-align: middle; margin-right: 8px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  .admin-notice {
-    background: rgba(107,31,31,0.05);
-    border: 1px solid rgba(107,31,31,0.15);
-    border-left: 3px solid var(--burgundy);
-    padding: 10px 14px;
-    border-radius: 0 1px 1px 0;
-    font-size: 12px; color: var(--muted);
-    margin-bottom: 24px;
+  @media (max-width: 600px) {
+    nav { padding: 0 16px; }
+    main { padding: 24px 16px; }
+    h2 { font-size: 38px; }
   }
 </style>
 </head>
 <body>
 <nav>
   <div class="nav-brand">
-    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+    <div class="nav-brand-icon">🔐</div>
     Family Vault
   </div>
-  <div style="display:flex;gap:12px">
+  <div style="display:flex;gap:10px">
     <a href="/dashboard" class="btn-nav">← Dashboard</a>
     <button class="btn-nav" onclick="logout()">Sign Out</button>
   </div>
@@ -200,63 +370,72 @@
 
 <main>
   <div class="page-header">
-    <h2>Upload Document</h2>
-    <p>Files are encrypted with AES-256 before being stored on the server</p>
+    <h2>UPLOAD <span>DOC</span></h2>
+    <p>// FILES ARE AES-256 ENCRYPTED BEFORE STORAGE</p>
   </div>
 
   <div class="admin-notice" id="adminNotice" style="display:none">
-    🔐 You are uploading as <strong id="adminEmail"></strong>
+    🔐 UPLOADING AS: <strong id="adminEmail">—</strong>
   </div>
 
   <div class="doc-limit" id="docLimitBar">
-    <span>📁</span>
-    <span id="limitText">Loading document count…</span>
+    <span id="limitText">LOADING…</span>
+    <div class="limit-bar-track">
+      <div class="limit-bar-fill" id="limitFill" style="width:0%"></div>
+    </div>
   </div>
 
   <div id="msgBox" class="msg"></div>
 
   <div class="card">
-    <div class="field">
-      <label>Document Title</label>
-      <input type="text" id="titleInput" placeholder="e.g. Home Insurance Policy 2024" maxlength="100">
+    <div class="card-header-strip">
+      📄 DOCUMENT DETAILS
     </div>
-
-    <div class="field">
-      <label>Document Type</label>
-      <select id="typeInput">
-        <option value="">— Select type —</option>
-        <option>Property</option>
-        <option>Insurance</option>
-        <option>Passport</option>
-        <option>Identity</option>
-        <option>Medical</option>
-        <option>Financial</option>
-        <option>Legal</option>
-        <option>Vehicle</option>
-        <option>Other</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>PDF File</label>
-      <div class="drop-zone" id="dropZone">
-        <input type="file" id="fileInput" accept=".pdf" onchange="fileSelected(this)">
-        <div class="drop-icon">📄</div>
-        <div class="drop-text"><strong>Click to choose</strong> or drag & drop</div>
-        <div class="drop-hint">PDF only · Max 20 MB</div>
+    <div class="card-body">
+      <div class="field">
+        <label>Document Title</label>
+        <input type="text" id="titleInput" placeholder="e.g. Home Insurance Policy 2024" maxlength="100">
       </div>
-      <div class="file-preview" id="filePreview">
-        <span>📄</span>
-        <span id="fileName"></span>
-        <span id="fileSize" style="color:var(--muted);font-size:11px;margin-left:auto"></span>
-      </div>
-    </div>
 
-    <button class="btn" id="uploadBtn" onclick="uploadDocument()">
-      🔒 Encrypt &amp; Upload
-    </button>
-    <div class="progress-bar" id="progressBar">
-      <div class="progress-fill" id="progressFill"></div>
+      <div class="field">
+        <label>Document Type</label>
+        <div class="select-wrapper">
+          <select id="typeInput">
+            <option value="">— Select type —</option>
+            <option>Property</option>
+            <option>Insurance</option>
+            <option>Passport</option>
+            <option>Identity</option>
+            <option>Medical</option>
+            <option>Financial</option>
+            <option>Legal</option>
+            <option>Vehicle</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>PDF File</label>
+        <div class="drop-zone" id="dropZone">
+          <input type="file" id="fileInput" accept=".pdf" onchange="fileSelected(this)">
+          <span class="drop-icon">📄</span>
+          <div class="drop-text">CLICK TO CHOOSE or DRAG & DROP</div>
+          <div class="drop-hint">// PDF ONLY · MAX 20 MB</div>
+        </div>
+        <div class="file-preview" id="filePreview">
+          <span>📄</span>
+          <span id="fileName">—</span>
+          <span class="file-size" id="fileSize">—</span>
+        </div>
+      </div>
+
+      <button class="btn-upload" id="uploadBtn" onclick="uploadDocument()">
+        🔒 ENCRYPT & UPLOAD
+      </button>
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
     </div>
   </div>
 </main>
@@ -264,7 +443,7 @@
 <script>
 function showMsg(text, type='error') {
   const box = document.getElementById('msgBox');
-  box.textContent = text;
+  box.textContent = '> ' + text;
   box.className = 'msg ' + type;
 }
 
@@ -273,21 +452,17 @@ function fileSelected(input) {
   if (!f) return;
   if (!f.name.toLowerCase().endsWith('.pdf')) {
     showMsg('Only PDF files are accepted.');
-    input.value = '';
-    return;
+    input.value = ''; return;
   }
   if (f.size > 20 * 1024 * 1024) {
     showMsg('File too large. Maximum 20 MB.');
-    input.value = '';
-    return;
+    input.value = ''; return;
   }
-  const preview = document.getElementById('filePreview');
   document.getElementById('fileName').textContent = f.name;
   document.getElementById('fileSize').textContent = (f.size/1024/1024).toFixed(2) + ' MB';
-  preview.classList.add('show');
+  document.getElementById('filePreview').classList.add('show');
 }
 
-// Drag & drop styling
 const dz = document.getElementById('dropZone');
 dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
 dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
@@ -296,21 +471,20 @@ dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag
 async function uploadDocument() {
   const title = document.getElementById('titleInput').value.trim();
   const type = document.getElementById('typeInput').value;
-  const fileInput = document.getElementById('fileInput');
-  const file = fileInput.files[0];
+  const file = document.getElementById('fileInput').files[0];
 
-  if (!title) return showMsg('Please enter a document title.');
-  if (!type) return showMsg('Please select a document type.');
-  if (!file) return showMsg('Please select a PDF file.');
+  if (!title) return showMsg('Document title required.');
+  if (!type) return showMsg('Document type required.');
+  if (!file) return showMsg('PDF file required.');
 
   const btn = document.getElementById('uploadBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>Encrypting & Uploading…';
+  btn.innerHTML = '<span class="spinner"></span>ENCRYPTING & UPLOADING…';
 
-  const bar = document.getElementById('progressBar');
-  const fill = document.getElementById('progressFill');
-  bar.classList.add('show');
-  fill.style.width = '30%';
+  const pw = document.getElementById('progressWrap');
+  const pf = document.getElementById('progressFill');
+  pw.classList.add('show');
+  pf.style.width = '30%';
 
   const formData = new FormData();
   formData.append('title', title);
@@ -318,25 +492,24 @@ async function uploadDocument() {
   formData.append('file', file);
 
   try {
-    fill.style.width = '60%';
+    pf.style.width = '65%';
     const r = await fetch('/api/upload-document', {method:'POST', body: formData});
     const d = await r.json();
     if (!r.ok) throw new Error(d.detail || 'Upload failed');
-    fill.style.width = '100%';
+    pf.style.width = '100%';
     showMsg('✅ ' + d.message, 'success');
-    // Reset form
     document.getElementById('titleInput').value = '';
     document.getElementById('typeInput').value = '';
-    fileInput.value = '';
+    document.getElementById('fileInput').value = '';
     document.getElementById('filePreview').classList.remove('show');
     loadDocCount();
   } catch(e) {
     showMsg(e.message);
-    fill.style.width = '0';
+    pf.style.width = '0';
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '🔒 Encrypt &amp; Upload';
-    setTimeout(() => bar.classList.remove('show'), 2000);
+    btn.innerHTML = '🔒 ENCRYPT & UPLOAD';
+    setTimeout(() => pw.classList.remove('show'), 2000);
   }
 }
 
@@ -345,8 +518,9 @@ async function loadDocCount() {
     const r = await fetch('/api/documents');
     if (!r.ok) return;
     const d = await r.json();
-    document.getElementById('limitText').textContent =
-      `${d.count} of ${d.limit} documents used`;
+    const pct = Math.min((d.count / d.limit) * 100, 100);
+    document.getElementById('limitText').textContent = `${d.count} / ${d.limit} DOCS USED`;
+    document.getElementById('limitFill').style.width = pct + '%';
     if (d.count >= d.limit) {
       document.getElementById('limitText').textContent += ' — LIMIT REACHED';
       document.getElementById('uploadBtn').disabled = true;
@@ -360,7 +534,13 @@ async function checkAdmin() {
     if (!r.ok) { window.location.href = '/'; return; }
     const u = await r.json();
     if (!u.is_admin) {
-      document.body.innerHTML = '<div style="text-align:center;padding:100px;font-family:sans-serif;color:#6b1f1f"><h2>Access Denied</h2><p>Admin only page.</p><a href="/dashboard">← Back</a></div>';
+      document.body.innerHTML = `<div style="text-align:center;padding:100px;font-family:'Space Mono',monospace">
+        <div style="border:3px solid #0a0a0a;background:#FF2D2D;color:white;padding:40px;display:inline-block;box-shadow:8px 8px 0 #0a0a0a">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:0.1em">ACCESS DENIED</div>
+          <p style="font-size:12px;margin:12px 0 20px;letter-spacing:0.08em">// ADMIN ONLY PAGE</p>
+          <a href="/dashboard" style="background:#0a0a0a;color:#FFE500;padding:10px 24px;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:0.08em">← BACK TO VAULT</a>
+        </div>
+      </div>`;
       return;
     }
     const notice = document.getElementById('adminNotice');

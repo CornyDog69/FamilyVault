@@ -3,307 +3,394 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Family Document Vault — Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Family Vault — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
-    --ink: #1a0f0a;
-    --burgundy: #6b1f1f;
-    --burgundy-light: #8b2e2e;
-    --gold: #c49a3c;
-    --gold-light: #e8c97e;
-    --cream: #f8f3eb;
-    --cream-dark: #ede5d4;
-    --muted: #8a7060;
-    --border: #d4c4a8;
-    --white: #ffffff;
+    --black: #0a0a0a;
+    --white: #f5f0e8;
+    --yellow: #FFE500;
+    --red: #FF2D2D;
+    --blue: #1a1aff;
+    --green: #00CC66;
+    --border: 3px solid var(--black);
+    --shadow: 5px 5px 0px var(--black);
+    --shadow-sm: 3px 3px 0px var(--black);
   }
 
   body {
-    font-family: 'Jost', sans-serif;
-    background: var(--cream);
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--white);
     min-height: 100vh;
-    color: var(--ink);
+    color: var(--black);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--black) 1px, transparent 1px),
+      linear-gradient(90deg, var(--black) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.04;
+    z-index: 0;
+    pointer-events: none;
   }
 
   /* NAV */
   nav {
-    background: var(--burgundy);
+    background: var(--black);
+    border-bottom: var(--border);
     padding: 0 32px;
-    height: 60px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 2px 12px rgba(26,15,10,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 50;
   }
 
   .nav-brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    color: var(--gold-light);
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--yellow);
+    letter-spacing: 0.06em;
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
-  .nav-brand svg { width: 18px; height: 18px; fill: var(--gold-light); }
+  .nav-brand-icon {
+    width: 34px; height: 34px;
+    background: var(--yellow);
+    border: 2px solid var(--yellow);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
 
   .nav-right {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
   }
 
   .nav-user {
-    font-size: 13px;
-    color: rgba(232,201,126,0.7);
-    font-weight: 300;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: rgba(245,240,232,0.5);
+    letter-spacing: 0.06em;
   }
-
-  .nav-user strong { color: var(--gold-light); font-weight: 500; }
+  .nav-user strong { color: var(--yellow); font-weight: 700; }
 
   .btn-nav {
-    padding: 7px 18px;
-    border: 1px solid rgba(232,201,126,0.3);
+    padding: 7px 16px;
+    border: 2px solid rgba(245,240,232,0.3);
     background: transparent;
-    color: var(--gold-light);
-    border-radius: 1px;
-    font-family: 'Jost', sans-serif;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s;
     text-decoration: none;
   }
-  .btn-nav:hover { background: rgba(232,201,126,0.1); border-color: var(--gold-light); }
-  .btn-nav.admin { background: rgba(196,154,60,0.15); }
+  .btn-nav:hover { background: rgba(245,240,232,0.1); border-color: var(--white); }
+
+  .btn-nav.upload {
+    background: var(--yellow);
+    color: var(--black);
+    border-color: var(--yellow);
+    box-shadow: 3px 3px 0 rgba(245,240,232,0.3);
+  }
+  .btn-nav.upload:hover {
+    box-shadow: 5px 5px 0 rgba(245,240,232,0.3);
+    transform: translate(-1px,-1px);
+  }
 
   /* MAIN */
   main {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 48px 24px;
+    padding: 40px 24px;
+    position: relative;
+    z-index: 1;
   }
 
+  /* PAGE HEADER */
   .page-header {
-    margin-bottom: 36px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
+    gap: 16px;
   }
 
   .page-header h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 600;
-    color: var(--ink);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--black);
+    letter-spacing: 0.03em;
     line-height: 1;
   }
 
+  .page-header h2 span {
+    display: inline-block;
+    background: var(--yellow);
+    padding: 0 8px;
+    border: 2px solid var(--black);
+  }
+
   .page-header p {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 6px;
-    font-weight: 300;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: #666;
+    letter-spacing: 0.06em;
+    margin-top: 8px;
   }
 
   .doc-count {
+    font-family: 'Space Mono', monospace;
     font-size: 12px;
-    color: var(--muted);
-    background: var(--cream-dark);
-    border: 1px solid var(--border);
-    padding: 6px 14px;
-    border-radius: 20px;
-    letter-spacing: 0.04em;
+    color: var(--black);
+    background: var(--yellow);
+    border: var(--border);
+    padding: 8px 16px;
+    box-shadow: var(--shadow-sm);
     white-space: nowrap;
+    flex-shrink: 0;
+    font-weight: 700;
   }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .filter-chip {
+    padding: 6px 14px;
+    border: 2px solid var(--black);
+    background: var(--white);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .filter-chip:hover { background: var(--black); color: var(--white); }
+  .filter-chip.active { background: var(--black); color: var(--yellow); box-shadow: var(--shadow-sm); }
 
   /* DOC GRID */
   .doc-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
   }
 
   .doc-card {
     background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 24px;
-    transition: box-shadow 0.2s, transform 0.2s;
+    border: var(--border);
+    box-shadow: var(--shadow);
+    padding: 0;
+    transition: box-shadow 0.15s, transform 0.15s;
+    animation: cardIn 0.4s cubic-bezier(0.34, 1.3, 0.64, 1) both;
     position: relative;
     overflow: hidden;
-    animation: fadeUp 0.5s ease both;
-  }
-
-  .doc-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: linear-gradient(180deg, var(--burgundy), var(--gold));
-    opacity: 0;
-    transition: opacity 0.2s;
   }
 
   .doc-card:hover {
-    box-shadow: 0 4px 24px rgba(26,15,10,0.10);
-    transform: translateY(-2px);
+    box-shadow: 8px 8px 0 var(--black);
+    transform: translate(-3px, -3px);
   }
 
-  .doc-card:hover::before { opacity: 1; }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
+  @keyframes cardIn {
+    from { opacity: 0; transform: scale(0.92) rotate(-1deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0); }
   }
 
-  .doc-icon {
-    width: 40px; height: 40px;
-    background: linear-gradient(135deg, #fdf0f0, #fce8e8);
-    border: 1px solid #f0d0d0;
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 14px;
-    font-size: 18px;
+  .doc-card-top {
+    background: var(--black);
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .doc-type-badge {
-    display: inline-block;
+    font-family: 'Space Mono', monospace;
     font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
+    font-weight: 700;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--burgundy);
-    background: rgba(107,31,31,0.07);
-    padding: 3px 8px;
-    border-radius: 20px;
-    margin-bottom: 8px;
+    color: var(--yellow);
+    background: transparent;
+  }
+
+  .doc-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .doc-card-body {
+    padding: 18px;
   }
 
   .doc-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 17px;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 4px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 6px;
     line-height: 1.3;
   }
 
   .doc-date {
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 300;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: #888;
+    letter-spacing: 0.04em;
     margin-bottom: 16px;
   }
 
-  .doc-actions { display: flex; gap: 8px; }
+  .doc-actions {
+    display: flex;
+    gap: 8px;
+    border-top: 2px solid var(--black);
+    padding-top: 14px;
+  }
 
   .btn-doc {
     flex: 1;
-    padding: 8px;
-    border-radius: 1px;
-    font-family: 'Jost', sans-serif;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
+    padding: 9px 6px;
+    border: 2px solid var(--black);
+    background: var(--white);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.2s;
-    border: 1px solid var(--border);
-    background: var(--cream);
-    color: var(--ink);
+    transition: all 0.1s;
     text-align: center;
     text-decoration: none;
+    color: var(--black);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 4px;
   }
 
-  .btn-doc:hover { background: var(--cream-dark); border-color: var(--muted); }
+  .btn-doc:hover { background: var(--black); color: var(--white); }
 
   .btn-doc.primary {
-    background: var(--burgundy);
-    color: var(--gold-light);
-    border-color: var(--burgundy);
+    background: var(--black);
+    color: var(--yellow);
+    box-shadow: var(--shadow-sm);
   }
-  .btn-doc.primary:hover { background: var(--burgundy-light); }
+  .btn-doc.primary:hover { background: #333; box-shadow: 4px 4px 0 var(--black); transform: translate(-1px,-1px); }
 
-  .btn-doc.danger { color: #8b1f1f; }
-  .btn-doc.danger:hover { background: #fdf0f0; border-color: #e0a0a0; color: #8b1f1f; }
+  .btn-doc.danger {
+    background: var(--red);
+    color: var(--white);
+    border-color: var(--black);
+    display: none;
+  }
+  .doc-card:hover .btn-doc.danger { display: flex; }
+  .btn-doc.danger:hover { background: #cc0000; }
 
   /* EMPTY STATE */
   .empty-state {
     grid-column: 1/-1;
+    border: var(--border);
+    box-shadow: var(--shadow-lg);
+    padding: 80px 40px;
     text-align: center;
-    padding: 80px 20px;
-    color: var(--muted);
+    background: var(--white);
   }
 
-  .empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
+  .empty-icon { font-size: 52px; margin-bottom: 16px; display: block; }
+
   .empty-state h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    color: var(--ink);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
     margin-bottom: 8px;
-    font-weight: 400;
+    letter-spacing: 0.04em;
   }
-  .empty-state p { font-size: 14px; font-weight: 300; }
+
+  .empty-state p {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: #888;
+  }
 
   /* LOADING */
-  .loading {
+  .loading-state {
     grid-column: 1/-1;
-    text-align: center;
-    padding: 60px;
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 300;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px;
+    gap: 16px;
   }
 
-  .spinner {
-    display: inline-block; width: 28px; height: 28px;
-    border: 2px solid var(--border);
-    border-top-color: var(--burgundy);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 12px;
-    display: block;
+  .spinner-block {
+    width: 40px; height: 40px;
+    border: 4px solid var(--black);
+    border-top-color: var(--yellow);
+    animation: spin 0.6s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-state p {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: #888;
+    letter-spacing: 0.08em;
+  }
 
   /* TOAST */
   .toast {
     position: fixed;
     bottom: 24px; right: 24px;
-    padding: 12px 20px;
-    border-radius: 2px;
-    font-size: 13px;
-    font-weight: 400;
+    padding: 14px 20px;
+    border: var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
     z-index: 100;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    transform: translateY(80px);
-    transition: transform 0.3s ease;
+    transform: translateY(100px);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    letter-spacing: 0.04em;
   }
   .toast.show { transform: translateY(0); }
-  .toast.success { background: var(--ink); color: var(--gold-light); }
-  .toast.error { background: #8b1f1f; color: #fff; }
+  .toast.success { background: var(--yellow); color: var(--black); box-shadow: var(--shadow); }
+  .toast.error { background: var(--red); color: var(--white); box-shadow: var(--shadow); }
 
-  /* Admin delete button only shows on hover */
-  .btn-doc.danger { display: none; }
-  .doc-card:hover .btn-doc.danger { display: flex; }
+  /* COLOR CODING BY DOC TYPE */
+  .doc-card[data-type="Property"] .doc-card-top { background: #1a1aff; }
+  .doc-card[data-type="Insurance"] .doc-card-top { background: #006633; }
+  .doc-card[data-type="Passport"] .doc-card-top { background: #6600cc; }
+  .doc-card[data-type="Identity"] .doc-card-top { background: #cc6600; }
+  .doc-card[data-type="Medical"] .doc-card-top { background: #cc0033; }
+  .doc-card[data-type="Financial"] .doc-card-top { background: #006666; }
+  .doc-card[data-type="Legal"] .doc-card-top { background: #333333; }
+  .doc-card[data-type="Vehicle"] .doc-card-top { background: #553300; }
 
   @media (max-width: 600px) {
     nav { padding: 0 16px; }
     main { padding: 24px 16px; }
-    .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .page-header { flex-direction: column; align-items: flex-start; }
+    .page-header h2 { font-size: 38px; }
   }
 </style>
 </head>
@@ -311,12 +398,12 @@
 
 <nav>
   <div class="nav-brand">
-    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+    <div class="nav-brand-icon">🔐</div>
     Family Vault
   </div>
   <div class="nav-right">
-    <span class="nav-user">Hello, <strong id="navUsername">—</strong></span>
-    <a href="/upload" class="btn-nav admin" id="adminLink" style="display:none">Upload Doc</a>
+    <span class="nav-user">// <strong id="navUsername">—</strong></span>
+    <a href="/upload" class="btn-nav upload" id="adminLink" style="display:none">+ Upload Doc</a>
     <button class="btn-nav" onclick="logout()">Sign Out</button>
   </div>
 </nav>
@@ -324,16 +411,28 @@
 <main>
   <div class="page-header">
     <div>
-      <h2>Family Documents</h2>
-      <p>All files are encrypted and stored securely</p>
+      <h2>FAMILY <span>DOCS</span></h2>
+      <p>// ALL FILES ENCRYPTED · AES-256</p>
     </div>
-    <span class="doc-count" id="docCount">Loading…</span>
+    <span class="doc-count" id="docCount">LOADING…</span>
+  </div>
+
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-chip active" onclick="filterDocs('All', this)">All</button>
+    <button class="filter-chip" onclick="filterDocs('Property', this)">🏠 Property</button>
+    <button class="filter-chip" onclick="filterDocs('Insurance', this)">🛡️ Insurance</button>
+    <button class="filter-chip" onclick="filterDocs('Passport', this)">🛂 Passport</button>
+    <button class="filter-chip" onclick="filterDocs('Identity', this)">🪪 Identity</button>
+    <button class="filter-chip" onclick="filterDocs('Medical', this)">⚕️ Medical</button>
+    <button class="filter-chip" onclick="filterDocs('Financial', this)">💼 Financial</button>
+    <button class="filter-chip" onclick="filterDocs('Legal', this)">⚖️ Legal</button>
+    <button class="filter-chip" onclick="filterDocs('Vehicle', this)">🚗 Vehicle</button>
   </div>
 
   <div class="doc-grid" id="docGrid">
-    <div class="loading">
-      <div class="spinner"></div>
-      Loading documents…
+    <div class="loading-state">
+      <div class="spinner-block"></div>
+      <p>LOADING DOCUMENTS…</p>
     </div>
   </div>
 </main>
@@ -342,16 +441,18 @@
 
 <script>
 const DOC_TYPE_ICONS = {
-  'Property': '🏠', 'Insurance': '🛡️', 'Passport': '🛂',
-  'Identity': '🪪', 'Medical': '⚕️', 'Financial': '💼',
-  'Legal': '⚖️', 'Vehicle': '🚗', 'Other': '📄',
+  'Property':'🏠','Insurance':'🛡️','Passport':'🛂',
+  'Identity':'🪪','Medical':'⚕️','Financial':'💼',
+  'Legal':'⚖️','Vehicle':'🚗','Other':'📄',
 };
 
 let isAdmin = false;
+let allDocuments = [];
+let activeFilter = 'All';
 
 function showToast(msg, type='success') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
+  t.textContent = '> ' + msg;
   t.className = 'toast ' + type;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
@@ -359,8 +460,56 @@ function showToast(msg, type='success') {
 
 function formatDate(iso) {
   if (!iso) return '';
-  const d = new Date(iso);
-  return d.toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+  return new Date(iso).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
+}
+
+function escapeHtml(t) {
+  return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function filterDocs(type, btn) {
+  activeFilter = type;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderDocuments(allDocuments);
+}
+
+function renderDocuments(docs) {
+  const grid = document.getElementById('docGrid');
+  const filtered = activeFilter === 'All' ? docs : docs.filter(d => d.document_type === activeFilter);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <span class="empty-icon">📂</span>
+        <h3>No Documents Found</h3>
+        <p>// ${activeFilter === 'All' ? 'No documents have been uploaded yet.' : 'No ' + activeFilter + ' documents found.'}</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((doc, i) => {
+    const icon = DOC_TYPE_ICONS[doc.document_type] || '📄';
+    const deleteBtn = isAdmin
+      ? `<button class="btn-doc danger" onclick="deleteDoc('${doc.id}', this)">🗑️ DEL</button>`
+      : '';
+    return `
+      <div class="doc-card" data-type="${escapeHtml(doc.document_type)}" style="animation-delay:${i*0.06}s">
+        <div class="doc-card-top">
+          <span class="doc-type-badge">${escapeHtml(doc.document_type || 'Document')}</span>
+          <span class="doc-icon">${icon}</span>
+        </div>
+        <div class="doc-card-body">
+          <div class="doc-title">${escapeHtml(doc.title)}</div>
+          <div class="doc-date">// ADDED ${formatDate(doc.uploaded_at)}</div>
+          <div class="doc-actions">
+            <a class="btn-doc primary" href="/api/get_document/${doc.id}" target="_blank">📖 VIEW</a>
+            <a class="btn-doc" href="/api/get_document/${doc.id}" download>⬇ SAVE</a>
+            ${deleteBtn}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
 }
 
 async function loadUser() {
@@ -379,46 +528,12 @@ async function loadDocuments() {
     const r = await fetch('/api/documents');
     if (!r.ok) { window.location.href = '/'; return; }
     const data = await r.json();
-
-    const docCount = document.getElementById('docCount');
-    docCount.textContent = `${data.count} / ${data.limit} documents`;
-
-    const grid = document.getElementById('docGrid');
-    if (!data.documents || data.documents.length === 0) {
-      grid.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">📂</div>
-          <h3>No documents yet</h3>
-          <p>The admin hasn't uploaded any documents yet.</p>
-        </div>`;
-      return;
-    }
-
-    grid.innerHTML = data.documents.map((doc, i) => {
-      const icon = DOC_TYPE_ICONS[doc.document_type] || '📄';
-      const deleteBtn = isAdmin
-        ? `<button class="btn-doc danger" onclick="deleteDoc('${doc.id}', this)" title="Delete">🗑️ Delete</button>`
-        : '';
-      return `
-        <div class="doc-card" style="animation-delay:${i*0.07}s">
-          <div class="doc-icon">${icon}</div>
-          <span class="doc-type-badge">${doc.document_type || 'Document'}</span>
-          <div class="doc-title">${escapeHtml(doc.title)}</div>
-          <div class="doc-date">Added ${formatDate(doc.uploaded_at)}</div>
-          <div class="doc-actions">
-            <a class="btn-doc primary" href="/api/get_document/${doc.id}" target="_blank">
-              📖 View PDF
-            </a>
-            <a class="btn-doc" href="/api/get_document/${doc.id}" download>
-              ⬇ Save
-            </a>
-            ${deleteBtn}
-          </div>
-        </div>`;
-    }).join('');
-  } catch(e) {
+    document.getElementById('docCount').textContent = `${data.count} / ${data.limit} DOCS`;
+    allDocuments = data.documents || [];
+    renderDocuments(allDocuments);
+  } catch {
     document.getElementById('docGrid').innerHTML =
-      `<div class="loading" style="color:#8b1f1f">Failed to load documents. Please refresh.</div>`;
+      `<div class="empty-state"><span class="empty-icon">⚠️</span><h3>Load Failed</h3><p>// Please refresh the page.</p></div>`;
   }
 }
 
@@ -442,11 +557,6 @@ async function logout() {
   window.location.href = '/';
 }
 
-function escapeHtml(t) {
-  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// Init
 loadUser().then(loadDocuments);
 </script>
 </body>

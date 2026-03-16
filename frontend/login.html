@@ -3,239 +3,322 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Family Document Vault — Login</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Family Vault — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --ink: #1a0f0a;
-    --burgundy: #6b1f1f;
-    --burgundy-light: #8b2e2e;
-    --gold: #c49a3c;
-    --gold-light: #e8c97e;
-    --cream: #f8f3eb;
-    --cream-dark: #ede5d4;
-    --muted: #8a7060;
-    --border: #d4c4a8;
+    --black: #0a0a0a;
+    --white: #f5f0e8;
+    --yellow: #FFE500;
+    --red: #FF2D2D;
+    --blue: #1a1aff;
+    --border: 3px solid var(--black);
+    --shadow: 5px 5px 0px var(--black);
+    --shadow-lg: 8px 8px 0px var(--black);
   }
 
   body {
-    font-family: 'Jost', sans-serif;
-    background: var(--cream);
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--white);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    position: relative;
   }
 
-  .bg-texture {
-    position: fixed; inset: 0; z-index: 0;
-    background:
-      radial-gradient(ellipse 80% 80% at 20% 10%, rgba(107,31,31,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 60% at 80% 90%, rgba(196,154,60,0.07) 0%, transparent 60%),
-      url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='60' height='60' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--black) 1px, transparent 1px),
+      linear-gradient(90deg, var(--black) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.06;
+    z-index: 0;
+  }
+
+  /* Decorative blobs */
+  .blob {
+    position: fixed;
+    z-index: 0;
+    border: 3px solid var(--black);
+  }
+  .blob-1 {
+    top: -60px; left: -60px;
+    width: 280px; height: 280px;
+    background: var(--yellow);
+    border-radius: 50%;
+    box-shadow: var(--shadow-lg);
+  }
+  .blob-2 {
+    bottom: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: var(--red);
+    border-radius: 50%;
+    box-shadow: var(--shadow-lg);
+  }
+  .blob-3 {
+    top: 50%; right: 60px;
+    width: 80px; height: 80px;
+    background: var(--blue);
+    transform: rotate(12deg);
+    box-shadow: var(--shadow);
+  }
+  .blob-4 {
+    bottom: 120px; left: 80px;
+    width: 60px; height: 60px;
+    background: var(--yellow);
+    border-radius: 50%;
+    box-shadow: var(--shadow);
   }
 
   .card {
     position: relative; z-index: 1;
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 52px 48px;
+    background: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow-lg);
     width: 100%;
     max-width: 420px;
-    box-shadow:
-      0 1px 3px rgba(26,15,10,0.06),
-      0 8px 40px rgba(26,15,10,0.10),
-      0 0 0 1px rgba(196,154,60,0.08);
-    animation: fadeUp 0.6s ease both;
+    padding: 0;
+    animation: slideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(30px) rotate(-1deg); }
+    to   { opacity: 1; transform: translateY(0) rotate(0); }
   }
 
-  .vault-icon {
-    width: 52px; height: 52px;
-    background: var(--burgundy);
-    border-radius: 50%;
+  .card-header {
+    background: var(--black);
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .vault-badge {
+    width: 44px; height: 44px;
+    background: var(--yellow);
+    border: 2px solid var(--yellow);
     display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 24px;
-    box-shadow: 0 4px 16px rgba(107,31,31,0.25);
+    font-size: 22px;
+    flex-shrink: 0;
   }
 
-  .vault-icon svg { width: 24px; height: 24px; fill: var(--gold-light); }
-
-  .header { text-align: center; margin-bottom: 36px; }
-
-  h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 600;
-    font-size: 26px;
-    color: var(--ink);
-    letter-spacing: 0.01em;
-    line-height: 1.2;
-  }
-
-  .subtitle {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 6px;
-    font-weight: 300;
+  .card-header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--white);
     letter-spacing: 0.04em;
+    line-height: 1;
   }
 
-  .divider {
-    width: 40px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    margin: 12px auto 0;
+  .card-header-text p {
+    font-size: 11px;
+    color: rgba(245,240,232,0.5);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.08em;
+    margin-top: 3px;
+    text-transform: uppercase;
   }
+
+  .card-body {
+    padding: 28px;
+  }
+
+  .step { display: none; }
+  .step.active { display: block; animation: fadeSlide 0.3s ease both; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateX(10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .msg {
+    padding: 10px 14px;
+    border: 2px solid var(--black);
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 18px;
+    display: none;
+    font-weight: 700;
+  }
+  .msg.error { background: var(--red); color: var(--white); display: block; box-shadow: 3px 3px 0 var(--black); }
+  .msg.success { background: var(--yellow); color: var(--black); display: block; box-shadow: 3px 3px 0 var(--black); }
 
   .field { margin-bottom: 18px; }
 
   label {
     display: block;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--black);
     margin-bottom: 7px;
   }
 
   input {
     width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--border);
-    border-radius: 1px;
-    background: var(--cream);
-    font-family: 'Jost', sans-serif;
+    padding: 13px 14px;
+    border: var(--border);
+    background: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 15px;
-    color: var(--ink);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    font-weight: 500;
+    color: var(--black);
     outline: none;
+    transition: box-shadow 0.15s;
   }
 
   input:focus {
-    border-color: var(--burgundy);
+    box-shadow: var(--shadow);
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(107,31,31,0.07);
   }
 
-  input::placeholder { color: #c4b49e; }
+  input::placeholder { color: #999; font-weight: 400; }
+
+  .otp-input {
+    letter-spacing: 0.5em;
+    font-size: 24px !important;
+    font-family: 'Space Mono', monospace !important;
+    text-align: center;
+    font-weight: 700 !important;
+  }
 
   .btn {
     width: 100%;
-    padding: 13px;
-    background: var(--burgundy);
-    color: var(--gold-light);
-    border: none;
-    border-radius: 1px;
-    font-family: 'Jost', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    padding: 14px;
+    background: var(--black);
+    color: var(--yellow);
+    border: var(--border);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.1em;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    margin-top: 8px;
+    transition: box-shadow 0.1s, transform 0.1s;
+    box-shadow: var(--shadow);
+    margin-top: 6px;
   }
 
-  .btn:hover { background: var(--burgundy-light); }
-  .btn:active { transform: scale(0.99); }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn:hover { box-shadow: 7px 7px 0 var(--black); transform: translate(-2px,-2px); }
+  .btn:active { box-shadow: 2px 2px 0 var(--black); transform: translate(3px,3px); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: var(--shadow); }
 
   .btn-secondary {
-    background: transparent;
-    color: var(--burgundy);
-    border: 1px solid var(--border);
-    font-size: 12px;
-    margin-top: 10px;
-  }
-  .btn-secondary:hover { background: var(--cream); border-color: var(--burgundy); }
-
-  .step { display: none; }
-  .step.active { display: block; animation: fadeUp 0.4s ease both; }
-
-  .msg {
-    padding: 10px 14px;
-    border-radius: 1px;
+    background: var(--white);
+    color: var(--black);
+    border: 2px solid var(--black);
     font-size: 13px;
-    margin-bottom: 16px;
-    display: none;
+    font-family: 'Space Mono', monospace;
+    padding: 10px;
+    margin-top: 10px;
+    box-shadow: 3px 3px 0 var(--black);
+    letter-spacing: 0.04em;
   }
-  .msg.error { background: #fdf0f0; color: #8b1f1f; border: 1px solid #f0c4c4; display: block; }
-  .msg.success { background: #f0fdf4; color: #1a5c2e; border: 1px solid #c4ecd0; display: block; }
 
   .otp-hint {
-    font-size: 12px;
-    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: #666;
     text-align: center;
-    margin-top: 14px;
+    margin-top: 12px;
+    letter-spacing: 0.04em;
   }
+
+  .step-indicator {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 22px;
+  }
+
+  .step-dot {
+    height: 6px;
+    flex: 1;
+    background: #ddd;
+    border: 1.5px solid var(--black);
+    transition: background 0.2s;
+  }
+  .step-dot.active { background: var(--yellow); }
+  .step-dot.done { background: var(--black); }
 
   .spinner {
     display: inline-block; width: 14px; height: 14px;
-    border: 2px solid rgba(232,201,126,0.3);
-    border-top-color: var(--gold-light);
+    border: 2px solid rgba(255,229,0,0.3);
+    border-top-color: var(--yellow);
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
     vertical-align: middle; margin-right: 6px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 480px) {
+    .card { margin: 16px; }
+    .blob-3, .blob-4 { display: none; }
+  }
 </style>
 </head>
 <body>
-<div class="bg-texture"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="blob blob-4"></div>
 
 <div class="card">
-  <div class="vault-icon">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-    </svg>
-  </div>
-
-  <div class="header">
-    <h1>Family Document Vault</h1>
-    <p class="subtitle">Secure access for family members</p>
-    <div class="divider"></div>
-  </div>
-
-  <div id="msgBox" class="msg"></div>
-
-  <!-- Step 1: Email -->
-  <div id="step1" class="step active">
-    <div class="field">
-      <label>Email Address</label>
-      <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email">
+  <div class="card-header">
+    <div class="vault-badge">🔐</div>
+    <div class="card-header-text">
+      <h1>Family Vault</h1>
+      <p>Secure Document Access</p>
     </div>
-    <button class="btn" id="sendOtpBtn" onclick="sendOTP()">Send One-Time Code</button>
   </div>
 
-  <!-- Step 2: OTP -->
-  <div id="step2" class="step">
-    <div class="field">
-      <label>6-Digit Code</label>
-      <input type="text" id="otpInput" placeholder="• • • • • •" maxlength="6"
-             inputmode="numeric" autocomplete="one-time-code"
-             style="letter-spacing: 0.3em; font-size: 20px; text-align: center;">
+  <div class="card-body">
+    <div class="step-indicator">
+      <div class="step-dot active" id="dot1"></div>
+      <div class="step-dot" id="dot2"></div>
+      <div class="step-dot" id="dot3"></div>
     </div>
-    <button class="btn" id="verifyBtn" onclick="verifyOTP()">Verify & Enter Vault</button>
-    <button class="btn btn-secondary" onclick="goBack()">← Use different email</button>
-    <p class="otp-hint">Code expires in 5 minutes. Check your inbox (and spam).</p>
-  </div>
 
-  <!-- Step 3: Username (first login) -->
-  <div id="step3" class="step">
-    <div class="field">
-      <label>Choose Your Name</label>
-      <input type="text" id="usernameInput" placeholder="e.g. Priya, Dad, Grandma..."
-             maxlength="40" autocomplete="nickname">
+    <div id="msgBox" class="msg"></div>
+
+    <!-- Step 1: Email -->
+    <div id="step1" class="step active">
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <button class="btn" id="sendOtpBtn" onclick="sendOTP()">Send Code →</button>
     </div>
-    <button class="btn" onclick="setUsername()">Join the Vault</button>
+
+    <!-- Step 2: OTP -->
+    <div id="step2" class="step">
+      <div class="field">
+        <label>6-Digit Code</label>
+        <input type="text" id="otpInput" class="otp-input" placeholder="000000" maxlength="6"
+               inputmode="numeric" autocomplete="one-time-code">
+      </div>
+      <button class="btn" id="verifyBtn" onclick="verifyOTP()">Verify & Enter →</button>
+      <button class="btn btn-secondary" onclick="goBack()">← Different Email</button>
+      <p class="otp-hint">// CODE EXPIRES IN 5 MINUTES. CHECK SPAM.</p>
+    </div>
+
+    <!-- Step 3: Username -->
+    <div id="step3" class="step">
+      <div class="field">
+        <label>Your Display Name</label>
+        <input type="text" id="usernameInput" placeholder="e.g. Priya, Dad, Grandma…"
+               maxlength="40" autocomplete="nickname">
+      </div>
+      <button class="btn" onclick="setUsername()">Join Vault →</button>
+    </div>
   </div>
 </div>
 
@@ -244,26 +327,34 @@ let currentEmail = '';
 
 function showMsg(text, type='error') {
   const box = document.getElementById('msgBox');
-  box.textContent = text;
+  box.textContent = '> ' + text;
   box.className = 'msg ' + type;
 }
 function clearMsg() {
-  const box = document.getElementById('msgBox');
-  box.className = 'msg';
+  document.getElementById('msgBox').className = 'msg';
 }
+
+function updateDots(step) {
+  [1,2,3].forEach(i => {
+    const dot = document.getElementById('dot'+i);
+    dot.className = 'step-dot' + (i < step ? ' done' : i === step ? ' active' : '');
+  });
+}
+
 function showStep(n) {
   ['step1','step2','step3'].forEach((id,i) => {
     document.getElementById(id).classList.toggle('active', i === n-1);
   });
+  updateDots(n);
   clearMsg();
 }
 
 async function sendOTP() {
   const email = document.getElementById('emailInput').value.trim();
-  if (!email) return showMsg('Please enter your email address.');
+  if (!email) return showMsg('Email address required.');
   const btn = document.getElementById('sendOtpBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>Sending…';
+  btn.innerHTML = '<span class="spinner"></span>SENDING…';
   try {
     const r = await fetch('/api/auth/request-otp', {
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -279,16 +370,16 @@ async function sendOTP() {
     showMsg(e.message);
   } finally {
     btn.disabled = false;
-    btn.innerHTML = 'Send One-Time Code';
+    btn.innerHTML = 'Send Code →';
   }
 }
 
 async function verifyOTP() {
   const otp = document.getElementById('otpInput').value.trim();
-  if (otp.length !== 6) return showMsg('Enter the full 6-digit code.');
+  if (otp.length !== 6) return showMsg('Full 6-digit code required.');
   const btn = document.getElementById('verifyBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>Verifying…';
+  btn.innerHTML = '<span class="spinner"></span>VERIFYING…';
   try {
     const r = await fetch('/api/auth/verify-otp', {
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -298,22 +389,22 @@ async function verifyOTP() {
     if (!r.ok) throw new Error(d.detail || 'Verification failed');
     if (d.needs_username) {
       showStep(3);
-      showMsg('Welcome! Please choose a display name.', 'success');
+      showMsg('Almost there! Choose a name.', 'success');
       document.getElementById('usernameInput').focus();
     } else {
-      showMsg('Access granted. Entering vault…', 'success');
+      showMsg('Access granted. Loading vault…', 'success');
       setTimeout(() => window.location.href = '/dashboard', 900);
     }
   } catch(e) {
     showMsg(e.message);
     btn.disabled = false;
-    btn.innerHTML = 'Verify & Enter Vault';
+    btn.innerHTML = 'Verify & Enter →';
   }
 }
 
 async function setUsername() {
   const username = document.getElementById('usernameInput').value.trim();
-  if (!username) return showMsg('Please enter a name.');
+  if (!username) return showMsg('Name required.');
   try {
     const r = await fetch('/api/auth/set-username', {
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -330,7 +421,6 @@ async function setUsername() {
 
 function goBack() { showStep(1); }
 
-// Allow Enter key
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
   if (document.getElementById('step1').classList.contains('active')) sendOTP();
