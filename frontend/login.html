@@ -74,7 +74,7 @@
     box-shadow: var(--shadow-sm);
     padding: 11px 20px;
     font-family: 'Space Mono', monospace;
-    font-size: 12px; font-weight: 700;
+    font-size: 13px; font-weight: 700;
     letter-spacing: 0.08em; cursor: pointer;
     color: var(--text);
     transition: box-shadow 0.15s, transform 0.15s, background 0.3s, color 0.3s;
@@ -142,7 +142,7 @@
   .msg {
     padding: 14px 18px;
     border: var(--border);
-    font-size: 13px; font-family: 'Space Mono', monospace;
+    font-size: 14px; font-family: 'Space Mono', monospace;
     margin-bottom: 24px; display: none;
     font-weight: 700; letter-spacing: 0.03em;
   }
@@ -154,7 +154,7 @@
   label {
     display: block;
     font-family: 'Space Mono', monospace;
-    font-size: 11px; font-weight: 700;
+    font-size: 13px; font-weight: 700;
     letter-spacing: 0.13em; text-transform: uppercase;
     color: var(--muted); margin-bottom: 10px;
   }
@@ -165,7 +165,7 @@
     border: var(--border);
     background: var(--bg);
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 17px; font-weight: 500;
+    font-size: 19px; font-weight: 500;
     color: var(--text); outline: none;
     transition: box-shadow 0.15s, background 0.3s, border-color 0.3s;
   }
@@ -173,10 +173,10 @@
   input::placeholder { color: #aaa; font-weight: 400; }
 
   .otp-input {
-    letter-spacing: 0.55em; font-size: 32px !important;
+    letter-spacing: 0.55em; font-size: 36px !important;
     font-family: 'Space Mono', monospace !important;
     text-align: center; font-weight: 700 !important;
-    padding: 20px 18px !important;
+    padding: 22px 18px !important;
   }
 
   .btn {
@@ -195,7 +195,7 @@
 
   .btn-secondary {
     width: 100%; background: transparent; color: var(--text);
-    border: var(--border); font-size: 14px;
+    border: var(--border); font-size: 15px;
     font-family: 'Space Mono', monospace; padding: 14px;
     margin-top: 12px; box-shadow: var(--shadow-sm);
     letter-spacing: 0.05em; cursor: pointer;
@@ -204,7 +204,7 @@
   .btn-secondary:hover { box-shadow: var(--shadow); transform: translate(-2px,-2px); }
 
   .otp-hint {
-    font-family: 'Space Mono', monospace; font-size: 11px;
+    font-family: 'Space Mono', monospace; font-size: 13px;
     color: var(--muted); text-align: center;
     margin-top: 16px; letter-spacing: 0.04em;
   }
@@ -230,13 +230,19 @@
     .vault-badge { width: 52px; height: 52px; font-size: 24px; }
     .card-body { padding: 24px 20px; }
     .btn { font-size: 22px; padding: 17px; }
-    .otp-input { font-size: 26px !important; letter-spacing: 0.4em; }
-    .theme-toggle { top: 10px; right: 10px; padding: 9px 14px; font-size: 11px; }
+    .otp-input { font-size: 28px !important; letter-spacing: 0.4em; }
+    .theme-toggle { top: 10px; right: 10px; padding: 9px 14px; font-size: 12px; }
+    label { font-size: 12px; }
+    input { font-size: 16px; }
+    .btn-secondary { font-size: 13px; }
+    .otp-hint { font-size: 12px; }
   }
 
   @media (max-width: 380px) {
     .card-header-text h1 { font-size: 24px; }
     .otp-input { font-size: 22px !important; letter-spacing: 0.3em; }
+    label { font-size: 11px; }
+    input { font-size: 15px; }
   }
 </style>
 </head>

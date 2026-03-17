@@ -80,7 +80,7 @@
   .btn-nav {
     padding: 9px 18px; border: 2px solid rgba(245,240,232,0.3);
     background: transparent; color: var(--text-inv);
-    font-family: 'Space Mono', monospace; font-size: 12px;
+    font-family: 'Space Mono', monospace; font-size: 13px;
     font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
     cursor: pointer; text-decoration: none; transition: all 0.15s;
     white-space: nowrap;
@@ -105,7 +105,7 @@
     border: 3px solid var(--text); margin-left: 6px;
   }
   .page-header p {
-    font-family: 'Space Mono', monospace; font-size: 12px;
+    font-family: 'Space Mono', monospace; font-size: 13px;
     color: var(--muted); letter-spacing: 0.06em; margin-top: 10px;
   }
 
@@ -116,7 +116,7 @@
     box-shadow: var(--shadow-sm);
     display: flex; align-items: center; gap: 12px;
     font-family: 'Space Mono', monospace;
-    font-size: 12px; font-weight: 700;
+    font-size: 13px; font-weight: 700;
     letter-spacing: 0.04em; text-transform: uppercase;
     color: #0a0a0a;
   }
@@ -125,7 +125,7 @@
   .doc-limit {
     border: var(--border); background: #0a0a0a; color: var(--yellow);
     padding: 14px 20px; margin-bottom: 30px;
-    font-family: 'Space Mono', monospace; font-size: 13px;
+    font-family: 'Space Mono', monospace; font-size: 14px;
     font-weight: 700; letter-spacing: 0.06em;
     display: flex; align-items: center; justify-content: space-between;
     box-shadow: var(--shadow-sm);
@@ -146,7 +146,7 @@
   /* MESSAGE */
   .msg {
     padding: 14px 20px; border: var(--border);
-    font-family: 'Space Mono', monospace; font-size: 13px;
+    font-family: 'Space Mono', monospace; font-size: 14px;
     font-weight: 700; margin-bottom: 24px; display: none; letter-spacing: 0.04em;
   }
   .msg.error  { background: var(--red); color: #fff; display: block; box-shadow: var(--shadow-sm); }
@@ -169,7 +169,7 @@
 
   label {
     display: block; font-family: 'Space Mono', monospace;
-    font-size: 11px; font-weight: 700;
+    font-size: 13px; font-weight: 700;
     letter-spacing: 0.13em; text-transform: uppercase;
     color: var(--muted); margin-bottom: 10px;
   }
@@ -177,7 +177,7 @@
   input, select {
     width: 100%; padding: 16px 18px; border: var(--border);
     background: var(--bg); font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px; font-weight: 500; color: var(--text);
+    font-size: 17px; font-weight: 500; color: var(--text);
     outline: none; transition: box-shadow 0.15s, background 0.3s;
     appearance: none;
   }
@@ -209,10 +209,10 @@
   .drop-icon { font-size: 48px; display: block; margin-bottom: 14px; }
   .drop-text {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 17px; font-weight: 700; color: var(--text);
+    font-size: 18px; font-weight: 700; color: var(--text);
   }
   .drop-hint {
-    font-family: 'Space Mono', monospace; font-size: 11px;
+    font-family: 'Space Mono', monospace; font-size: 13px;
     color: var(--muted); margin-top: 8px; letter-spacing: 0.06em;
   }
 
@@ -225,7 +225,7 @@
   }
   [data-theme="dark"] .file-preview { border-color: #f5f0e8; }
   .file-preview.show { display: flex; }
-  .file-size { margin-left: auto; opacity: 0.65; font-size: 11px; }
+  .file-size { margin-left: auto; opacity: 0.65; font-size: 13px; }
 
   /* UPLOAD BTN */
   .btn-upload {
@@ -283,8 +283,21 @@
     .card-body { padding: 22px 18px; }
     .drop-zone { padding: 40px 16px; }
     .drop-icon { font-size: 36px; }
+    .drop-text { font-size: 16px; }
+    .drop-hint { font-size: 12px; }
     .btn-upload { font-size: 22px; padding: 18px; }
     .limit-bar-track { width: 90px; }
+    label { font-size: 12px; }
+    input, select { font-size: 16px; }
+    .msg { font-size: 13px; }
+    .doc-limit { font-size: 12px; flex-wrap: wrap; gap: 10px; }
+    .admin-notice { font-size: 12px; }
+  }
+
+  @media (max-width: 400px) {
+    .card-header-strip { font-size: 18px; padding: 14px 18px; }
+    input, select { font-size: 15px; padding: 14px 14px; }
+    .btn-upload { font-size: 20px; padding: 16px; }
   }
 </style>
 </head>
