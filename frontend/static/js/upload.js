@@ -111,4 +111,22 @@ async function logout() {
     window.location.href = '/';
 }
 
+// Inactivity Timer Protocol (5 minutes = 300000 ms)
+let inactivityTimer;
+
+function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(logout, 5 * 60 * 1000); // 5 mins
+}
+
+// Reset timer on any user interaction
+window.addEventListener('mousemove', resetInactivityTimer);
+window.addEventListener('mousedown', resetInactivityTimer);
+window.addEventListener('keypress', resetInactivityTimer);
+window.addEventListener('scroll', resetInactivityTimer);
+window.addEventListener('touchstart', resetInactivityTimer);
+
+// Initialize timer on load
+resetInactivityTimer();
+
 checkAdmin(); loadDocCount();
