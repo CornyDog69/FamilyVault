@@ -94,12 +94,8 @@ app = FastAPI(
 )
 
 
-# Mount static files (CSS, JS)
-app.mount(
-    "/static",
-    StaticFiles(directory=str(FRONTEND_DIR)),
-    name="static"
-)
+# Note: Static files are served via a catch-all route at the bottom of the file
+# to handle both nested (css/...) and flat frontend directory structures correctly.
 
 
 # CORS (keep as is)
@@ -139,6 +135,31 @@ async def upload_page():
 @app.get("/health")
 async def health():
     return {"status": "ok", "service": "GUPTA VAULT"}
+
+
+# -------------------------------
+# Catch-all Static File Route
+# -------------------------------
+
+@app.get("/{file_path:path}")
+async def serve_static(file_path: str):
+    """
+    Catch-all route to serve static files (CSS, JS). Designed to gracefully handle 
+    both flat architectures and nested 'css/' or 'js/' folder structures
+    no matter what changes are made on the frontend.
+    """
+    # 1. Try exact path (in case files were structured into css/ and js/ folders)
+    full_path = FRONTEND_DIR / file_path
+    if full_path.is_file():
+        return FileResponse(full_path)
+    
+    # 2. Fallback to flat filename (in case html asks for /css/login.css but folder is flat)
+    filename = Path(file_path).name
+    flat_path = FRONTEND_DIR / filename
+    if flat_path.is_file():
+        return FileResponse(flat_path)
+
+    return JSONResponse(status_code=404, content={"message": "Not Found"})
 
 
 # -------------------------------
