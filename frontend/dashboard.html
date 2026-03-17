@@ -1,666 +1,80 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Family Vault — Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Vault — Dashboard</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./dashboard.css">
 
-  :root {
-    --yellow: #FFE500;
-    --red: #FF2D2D;
-    --blue: #1a1aff;
-    --green: #00CC66;
-    --bg: #f5f0e8;
-    --surface: #ffffff;
-    --nav-bg: #0a0a0a;
-    --text: #0a0a0a;
-    --text-inv: #f5f0e8;
-    --muted: #666;
-    --grid-color: rgba(10,10,10,0.05);
-    --border: 3px solid #0a0a0a;
-    --shadow: 6px 6px 0px #0a0a0a;
-    --shadow-lg: 10px 10px 0px #0a0a0a;
-    --shadow-sm: 4px 4px 0px #0a0a0a;
-    --card-border-color: #0a0a0a;
-  }
-
-  [data-theme="dark"] {
-    --bg: #111111;
-    --surface: #1c1c1c;
-    --nav-bg: #000000;
-    --text: #f5f0e8;
-    --text-inv: #0a0a0a;
-    --muted: #999;
-    --grid-color: rgba(245,240,232,0.04);
-    --border: 3px solid #f5f0e8;
-    --shadow: 6px 6px 0px #f5f0e8;
-    --shadow-lg: 10px 10px 0px #f5f0e8;
-    --shadow-sm: 4px 4px 0px #f5f0e8;
-    --card-border-color: #f5f0e8;
-  }
-
-  body {
-    font-family: 'Space Grotesk', sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-    color: var(--text);
-    transition: background 0.3s, color 0.3s;
-  }
-
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      linear-gradient(var(--grid-color) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-    background-size: 48px 48px;
-    z-index: 0; pointer-events: none;
-  }
-
-  /* NAV */
-  nav {
-    background: var(--nav-bg);
-    border-bottom: 3px solid var(--card-border-color);
-    padding: 0 40px;
-    height: 72px;
-    display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 50;
-    transition: background 0.3s, border-color 0.3s;
-  }
-
-  .nav-brand {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 30px; color: var(--yellow);
-    letter-spacing: 0.06em;
-    display: flex; align-items: center; gap: 12px;
-  }
-
-  .nav-brand-icon {
-    width: 40px; height: 40px;
-    background: var(--yellow);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
-  }
-
-  .nav-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-
-  .nav-user {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px; color: rgba(245,240,232,0.5);
-    letter-spacing: 0.06em;
-  }
-  .nav-user strong { color: var(--yellow); font-weight: 700; }
-
-  .btn-nav {
-    padding: 9px 18px;
-    border: 2px solid rgba(245,240,232,0.3);
-    background: transparent; color: #f5f0e8;
-    font-family: 'Space Mono', monospace;
-    font-size: 15px; font-weight: 700;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.15s; text-decoration: none;
-    white-space: nowrap;
-  }
-  .btn-nav:hover { background: rgba(245,240,232,0.1); border-color: #f5f0e8; }
-
-  .btn-nav.upload {
-    background: var(--yellow); color: #0a0a0a;
-    border-color: var(--yellow);
-    box-shadow: 3px 3px 0 rgba(245,240,232,0.4);
-  }
-  .btn-nav.upload:hover { box-shadow: 5px 5px 0 rgba(245,240,232,0.4); transform: translate(-1px,-1px); }
-
-  .btn-nav.theme {
-    background: transparent;
-    border-color: rgba(245,240,232,0.4);
-    color: #f5f0e8;
-  }
-  .btn-nav.theme:hover { background: rgba(245,240,232,0.1); }
-
-  /* MAIN */
-  main {
-    width: 100%; margin: 0 auto;
-    padding: 48px 40px;
-    position: relative; z-index: 1;
-  }
-
-  /* PAGE HEADER */
-  .page-header {
-    margin-bottom: 36px;
-    display: flex; align-items: flex-end; justify-content: space-between; gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .page-header h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(48px, 7vw, 72px);
-    color: var(--text); letter-spacing: 0.03em; line-height: 1;
-  }
-
-  .page-header h2 span {
-    display: inline-block;
-    background: var(--yellow);
-    padding: 0 10px;
-    border: 3px solid var(--text);
-  }
-  [data-theme="dark"] .page-header h2 span {
-    color: #0a0a0a;
-  }
-
-  .page-header p {
-    font-family: 'Space Mono', monospace;
-    font-size: 16px; color: var(--muted);
-    letter-spacing: 0.06em; margin-top: 10px;
-  }
-
-  .doc-count {
-    font-family: 'Space Mono', monospace; font-size: 20px;
-    font-weight: 700; color: #0a0a0a;
-    background: var(--yellow);
-    border: var(--border); padding: 10px 20px;
-    box-shadow: var(--shadow-sm); white-space: nowrap; flex-shrink: 0;
-  }
-  [data-theme="dark"] .doc-count { color: #0a0a0a; }
-
-  /* FILTER BAR */
-  .filter-bar {
-    display: flex; gap: 10px; margin-bottom: 28px;
-    flex-wrap: wrap;
-  }
-
-  .filter-chip {
-    padding: 12px 22px;
-    border: var(--border);
-    background: var(--surface);
-    font-family: 'Space Mono', monospace;
-    font-size: 16px; font-weight: 700;
-    letter-spacing: 0.07em; text-transform: uppercase;
-    cursor: pointer; color: var(--text);
-    transition: all 0.12s;
-  }
-  .filter-chip:hover { background: var(--text); color: var(--bg); }
-  .filter-chip.active { background: var(--text); color: var(--yellow); box-shadow: var(--shadow-sm); }
-  [data-theme="dark"] .filter-chip.active { background: var(--yellow); color: #0a0a0a; }
-
-  /* DOC GRID */
-  .doc-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
-  }
-
-  .doc-card {
-    background: var(--surface);
-    border: var(--border);
-    box-shadow: var(--shadow);
-    transition: box-shadow 0.15s, transform 0.15s, background 0.3s;
-    animation: cardIn 0.4s cubic-bezier(0.34,1.3,0.64,1) both;
-    overflow: hidden;
-  }
-  .doc-card:hover { box-shadow: var(--shadow-lg); transform: translate(-4px,-4px); }
-
-  @keyframes cardIn {
-    from { opacity: 0; transform: scale(0.9) rotate(-1deg); }
-    to   { opacity: 1; transform: scale(1) rotate(0); }
-  }
-
-  .doc-card-top {
-    background: #0a0a0a;
-    padding: 22px 28px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  [data-theme="dark"] .doc-card-top { border-bottom: 2px solid #f5f0e8; }
-
-  .doc-type-badge {
-    font-family: 'Space Mono', monospace;
-    font-size: 16px; font-weight: 700;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--yellow);
-  }
-
-  .doc-icon { font-size: 32px; line-height: 1; }
-
-  .doc-card-body { padding: 32px 28px; }
-
-  .doc-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 26px; font-weight: 700; color: var(--text);
-    margin-bottom: 10px; line-height: 1.3;
-  }
-
-  .doc-date {
-    font-family: 'Space Mono', monospace;
-    font-size: 16px; color: var(--muted);
-    letter-spacing: 0.04em; margin-bottom: 20px;
-  }
-
-  .doc-actions {
-    display: flex; gap: 10px;
-    border-top: 2px solid var(--card-border-color);
-    padding-top: 16px;
-  }
-
-  .btn-doc {
-    flex: 1; padding: 14px 10px;
-    border: var(--border);
-    background: var(--bg);
-    font-family: 'Space Mono', monospace;
-    font-size: 15px; font-weight: 700;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.12s;
-    text-align: center; text-decoration: none;
-    color: var(--text);
-    display: flex; align-items: center; justify-content: center; gap: 5px;
-  }
-  .btn-doc:hover { background: var(--text); color: var(--bg); }
-
-  .btn-doc.primary {
-    background: #0a0a0a; color: var(--yellow);
-    box-shadow: var(--shadow-sm);
-  }
-  [data-theme="dark"] .btn-doc.primary { background: var(--yellow); color: #0a0a0a; }
-  .btn-doc.primary:hover { opacity: 0.85; box-shadow: var(--shadow); transform: translate(-2px,-2px); }
-
-  .btn-doc.danger { background: var(--red); color: #fff; border-color: var(--card-border-color); display: none; }
-  .doc-card:hover .btn-doc.danger { display: flex; }
-  .btn-doc.danger:hover { background: #cc0000; }
-
-  /* EMPTY STATE */
-  .empty-state {
-    grid-column: 1/-1;
-    border: var(--border);
-    box-shadow: var(--shadow-lg);
-    padding: 100px 40px;
-    text-align: center;
-    background: var(--surface);
-  }
-  .empty-icon { font-size: 60px; margin-bottom: 20px; display: block; }
-  .empty-state h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 38px; margin-bottom: 10px; letter-spacing: 0.04em;
-    color: var(--text);
-  }
-  .empty-state p { font-family: 'Space Mono', monospace; font-size: 14px; color: var(--muted); }
-
-  /* LOADING */
-  .loading-state {
-    grid-column: 1/-1;
-    display: flex; flex-direction: column; align-items: center;
-    padding: 100px; gap: 20px;
-  }
-  .spinner-block {
-    width: 48px; height: 48px; border: 5px solid var(--text);
-    border-top-color: var(--yellow); animation: spin 0.6s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-state p { font-family: 'Space Mono', monospace; font-size: 14px; color: var(--muted); letter-spacing: 0.08em; }
-
-  /* TOAST */
-  .toast {
-    position: fixed; bottom: 28px; right: 28px;
-    padding: 16px 24px; border: var(--border);
-    font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 700;
-    z-index: 100; transform: translateY(120px);
-    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    letter-spacing: 0.04em;
-  }
-  .toast.show { transform: translateY(0); }
-  .toast.success { background: var(--yellow); color: #0a0a0a; box-shadow: var(--shadow); }
-  .toast.error { background: var(--red); color: #fff; box-shadow: var(--shadow); }
-
-  /* DOC TYPE COLORS */
-  .doc-card[data-type="Property"]  .doc-card-top { background: #1a1aff; }
-  .doc-card[data-type="Insurance"] .doc-card-top { background: #006633; }
-  .doc-card[data-type="Passport"]  .doc-card-top { background: #6600cc; }
-  .doc-card[data-type="Identity"]  .doc-card-top { background: #cc5500; }
-  .doc-card[data-type="Medical"]   .doc-card-top { background: #cc0033; }
-  .doc-card[data-type="Financial"] .doc-card-top { background: #006666; }
-  .doc-card[data-type="Legal"]     .doc-card-top { background: #222222; }
-  .doc-card[data-type="Vehicle"]   .doc-card-top { background: #553300; }
-
-  /* DELETE MODAL */
-  .modal-overlay {
-    position: fixed; inset: 0; z-index: 200;
-    background: rgba(0,0,0,0.6);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.2s ease;
-  }
-  .modal-overlay.show { opacity: 1; pointer-events: all; }
-
-  .modal-box {
-    background: var(--surface);
-    border: var(--border);
-    box-shadow: var(--shadow-lg);
-    width: 100%; max-width: 420px;
-    animation: modalIn 0.25s cubic-bezier(0.34,1.4,0.64,1) both;
-  }
-  @keyframes modalIn {
-    from { transform: scale(0.88) translateY(20px); opacity: 0; }
-    to   { transform: scale(1) translateY(0); opacity: 1; }
-  }
-
-  .modal-header {
-    background: var(--red);
-    padding: 18px 24px;
-    display: flex; align-items: center; gap: 12px;
-    border-bottom: var(--border);
-  }
-  .modal-header-icon { font-size: 24px; line-height: 1; }
-  .modal-header-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px; color: #fff;
-    letter-spacing: 0.06em; line-height: 1;
-  }
-
-  .modal-body { padding: 24px; }
-  .modal-body p {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px; color: var(--text);
-    line-height: 1.5; margin-bottom: 6px;
-  }
-  .modal-body p strong { font-weight: 700; }
-  .modal-body small {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px; color: var(--muted);
-    letter-spacing: 0.04em; display: block; margin-top: 8px;
-  }
-
-  .modal-actions {
-    display: flex; gap: 10px;
-    padding: 0 24px 24px;
-  }
-  .modal-btn {
-    flex: 1; padding: 14px;
-    border: var(--border);
-    font-family: 'Space Mono', monospace;
-    font-size: 13px; font-weight: 700;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.12s;
-  }
-  .modal-btn.cancel {
-    background: var(--bg); color: var(--text);
-    box-shadow: var(--shadow-sm);
-  }
-  .modal-btn.cancel:hover { box-shadow: var(--shadow); transform: translate(-2px,-2px); }
-  .modal-btn.confirm-delete {
-    background: var(--red); color: #fff;
-    box-shadow: var(--shadow-sm);
-  }
-  .modal-btn.confirm-delete:hover { box-shadow: var(--shadow); transform: translate(-2px,-2px); }
-  .modal-btn.confirm-delete:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-  /* page-header p */
-  .page-header p {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px; color: var(--muted);
-    letter-spacing: 0.06em; margin-top: 10px;
-  }
-
-  /* RESPONSIVE */
-  @media (max-width: 1100px) {
-    .doc-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-  }
-
-  @media (max-width: 768px) {
-    nav { padding: 0 20px; height: 64px; }
-    .nav-user { display: none; }
-    main { padding: 28px 20px; }
-    .doc-grid { grid-template-columns: 1fr; gap: 20px; }
-    .filter-bar { gap: 7px; }
-    .filter-chip { padding: 10px 16px; font-size: 14px; }
-    .doc-title { font-size: 22px; }
-    .btn-doc { font-size: 13px; padding: 12px 8px; }
-    .toast { bottom: 16px; right: 16px; left: 16px; font-size: 15px; }
-  }
-
-  @media (max-width: 480px) {
-    nav { padding: 0 14px; }
-    .nav-brand { font-size: 22px; }
-    .nav-brand-icon { width: 32px; height: 32px; font-size: 16px; }
-    .btn-nav { padding: 8px 14px; font-size: 13px; }
-    .page-header { flex-direction: column; align-items: flex-start; }
-    .doc-count { align-self: flex-start; font-size: 16px; }
-    main { padding: 20px 14px; }
-    .doc-card-body { padding: 22px 18px; }
-    .doc-card-top { padding: 16px 18px; }
-    .modal-box { max-width: 100%; }
-    .modal-header-title { font-size: 22px; }
-    .modal-body p { font-size: 18px; }
-    .modal-btn { font-size: 14px; padding: 15px; }
-  }
-</style>
 </head>
+
 <body>
 
-<nav>
-  <div class="nav-brand">
-    Family Vault
-  </div>
-  <div class="nav-right">
-    <span class="nav-user">// <strong id="navUsername">—</strong></span>
-    <a href="/upload" class="btn-nav upload" id="adminLink" style="display:none">+ Upload</a>
-    <button class="btn-nav theme" onclick="toggleTheme()" id="themeBtn">☀️</button>
-    <button class="btn-nav" onclick="logout()">Sign Out</button>
-  </div>
-</nav>
-
-<main>
-  <div class="page-header">
-    <div>
-      <h2>FAMILY <span>DOCS</span></h2>
-      <p>// ALL FILES ENCRYPTED · AES-256</p>
+  <nav>
+    <div class="nav-brand">
+      Family Vault
     </div>
-    <span class="doc-count" id="docCount">LOADING…</span>
-  </div>
+    <div class="nav-right">
+      <span class="nav-user">// <strong id="navUsername">—</strong></span>
+      <a href="/upload" class="btn-nav upload" id="adminLink" style="display:none">+ Upload</a>
+      <button class="btn-nav theme" onclick="toggleTheme()" id="themeBtn">☀️</button>
+      <button class="btn-nav" onclick="logout()">Sign Out</button>
+    </div>
+  </nav>
 
-  <div class="filter-bar" id="filterBar">
-    <button class="filter-chip active" onclick="filterDocs('All', this)">All</button>
-    <button class="filter-chip" onclick="filterDocs('Property', this)">Property</button>
-    <button class="filter-chip" onclick="filterDocs('Insurance', this)">Insurance</button>
-    <button class="filter-chip" onclick="filterDocs('Passport', this)">Passport</button>
-    <button class="filter-chip" onclick="filterDocs('Identity', this)">Identity</button>
-    <button class="filter-chip" onclick="filterDocs('Medical', this)">Medical</button>
-    <button class="filter-chip" onclick="filterDocs('Financial', this)">Financial</button>
-    <button class="filter-chip" onclick="filterDocs('Legal', this)">Legal</button>
-    <button class="filter-chip" onclick="filterDocs('Vehicle', this)">Vehicle</button>
-  </div>
+  <main>
+    <div class="page-header">
+      <div>
+        <h2>FAMILY <span>DOCS</span></h2>
+        <p>// ALL FILES ENCRYPTED · AES-256</p>
+      </div>
+      <span class="doc-count" id="docCount">LOADING…</span>
+    </div>
 
-  <div class="doc-grid" id="docGrid">
-    <div class="loading-state">
-      <div class="spinner-block"></div>
-      <p>LOADING DOCUMENTS…</p>
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-chip active" onclick="filterDocs('All', this)">All</button>
+      <button class="filter-chip" onclick="filterDocs('Property', this)">Property</button>
+      <button class="filter-chip" onclick="filterDocs('Insurance', this)">Insurance</button>
+      <button class="filter-chip" onclick="filterDocs('Passport', this)">Passport</button>
+      <button class="filter-chip" onclick="filterDocs('Identity', this)">Identity</button>
+      <button class="filter-chip" onclick="filterDocs('Medical', this)">Medical</button>
+      <button class="filter-chip" onclick="filterDocs('Financial', this)">Financial</button>
+      <button class="filter-chip" onclick="filterDocs('Legal', this)">Legal</button>
+      <button class="filter-chip" onclick="filterDocs('Vehicle', this)">Vehicle</button>
+    </div>
+
+    <div class="doc-grid" id="docGrid">
+      <div class="loading-state">
+        <div class="spinner-block"></div>
+        <p>LOADING DOCUMENTS…</p>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div class="modal-overlay" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-header-icon">🗑️</span>
+        <span class="modal-header-title" id="modalTitle">Delete Document</span>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="modalDocTitle">this document</strong>?</p>
+        <small>// THIS ACTION CANNOT BE UNDONE.</small>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn cancel" id="modalCancelBtn" onclick="closeDeleteModal()">No</button>
+        <button class="modal-btn confirm-delete" id="modalConfirmBtn" onclick="confirmDelete()">Yes</button>
+      </div>
     </div>
   </div>
-</main>
-
-<div class="toast" id="toast"></div>
-
-<!-- DELETE CONFIRMATION MODAL -->
-<div class="modal-overlay" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal-box">
-    <div class="modal-header">
-      <span class="modal-header-icon">🗑️</span>
-      <span class="modal-header-title" id="modalTitle">Delete Document</span>
-    </div>
-    <div class="modal-body">
-      <p>Are you sure you want to delete <strong id="modalDocTitle">this document</strong>?</p>
-      <small>// THIS ACTION CANNOT BE UNDONE.</small>
-    </div>
-    <div class="modal-actions">
-      <button class="modal-btn cancel" id="modalCancelBtn" onclick="closeDeleteModal()">No</button>
-      <button class="modal-btn confirm-delete" id="modalConfirmBtn" onclick="confirmDelete()">Yes</button>
-    </div>
-  </div>
-</div>
-
-<script>
-const DOC_TYPE_ICONS = {
-  'Property':'','Insurance':'','Passport':'',
-  'Identity':'','Medical':'','Financial':'',
-  'Legal':'','Vehicle':'','Other':'',
-};
-
-let isAdmin = false;
-let allDocuments = [];
-let activeFilter = 'All';
-
-function toggleTheme() {
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
-  localStorage.setItem('vaultTheme', isDark ? 'light' : 'dark');
-}
-
-(function(){
-  const saved = localStorage.getItem('vaultTheme') || 'light';
-  document.documentElement.setAttribute('data-theme', saved);
-  window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('themeBtn').textContent = saved === 'dark' ? '🌙' : '☀️';
-  });
-})();
-
-function showToast(msg, type='success') {
-  const t = document.getElementById('toast');
-  t.textContent = '> ' + msg; t.className = 'toast ' + type; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function formatDate(iso) {
-  if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
-}
-
-function escapeHtml(t) {
-  return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function filterDocs(type, btn) {
-  activeFilter = type;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
-  renderDocuments(allDocuments);
-}
-
-function renderDocuments(docs) {
-  const grid = document.getElementById('docGrid');
-  const filtered = activeFilter === 'All' ? docs : docs.filter(d => d.document_type === activeFilter);
-
-  if (filtered.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <span class="empty-icon">📂</span>
-        <h3>No Documents Found</h3>
-        <p>// ${activeFilter === 'All' ? 'No documents have been uploaded yet.' : 'No ' + activeFilter + ' documents found.'}</p>
-      </div>`;
-    return;
-  }
-
-  grid.innerHTML = filtered.map((doc, i) => {
-    const icon = DOC_TYPE_ICONS[doc.document_type] || '';
-    const deleteBtn = isAdmin ? `<button class="btn-doc danger" data-title="${escapeHtml(doc.title)}" onclick="openDeleteModal('${doc.id}', this, this.dataset.title)">DELETE</button>` : '';
-    return `
-      <div class="doc-card" data-type="${escapeHtml(doc.document_type)}" style="animation-delay:${i*0.06}s">
-        <div class="doc-card-top">
-          <span class="doc-type-badge">${escapeHtml(doc.document_type || 'Document')}</span>
-          <span class="doc-icon">${icon}</span>
-        </div>
-        <div class="doc-card-body">
-          <div class="doc-title">${escapeHtml(doc.title)}</div>
-          <div class="doc-date">// ADDED ${formatDate(doc.uploaded_at)}</div>
-          <div class="doc-actions">
-            <a class="btn-doc primary" href="/api/get_document/${doc.id}" target="_blank">VIEW</a>
-            <a class="btn-doc" href="/api/get_document/${doc.id}" download>SAVE</a>
-            ${deleteBtn}
-          </div>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-async function loadUser() {
-  try {
-    const r = await fetch('/api/auth/me');
-    if (!r.ok) { window.location.href = '/'; return; }
-    const u = await r.json();
-    document.getElementById('navUsername').textContent = u.username || u.email;
-    isAdmin = u.is_admin;
-    if (isAdmin) document.getElementById('adminLink').style.display = '';
-  } catch { window.location.href = '/'; }
-}
-
-async function loadDocuments() {
-  try {
-    const r = await fetch('/api/documents');
-    if (!r.ok) { window.location.href = '/'; return; }
-    const data = await r.json();
-    document.getElementById('docCount').textContent = `${data.count} / ${data.limit} DOCS`;
-    allDocuments = data.documents || [];
-    renderDocuments(allDocuments);
-  } catch {
-    document.getElementById('docGrid').innerHTML =
-      `<div class="empty-state"><span class="empty-icon">⚠️</span><h3>Load Failed</h3><p>// Please refresh the page.</p></div>`;
-  }
-}
-
-let pendingDeleteId = null;
-let pendingDeleteBtn = null;
-
-function openDeleteModal(id, btn, title) {
-  pendingDeleteId = id;
-  pendingDeleteBtn = btn;
-  document.getElementById('modalDocTitle').textContent = title || 'this document';
-  document.getElementById('deleteModal').classList.add('show');
-  document.getElementById('modalConfirmBtn').disabled = false;
-  document.getElementById('modalConfirmBtn').textContent = 'Yes';
-}
-
-function closeDeleteModal() {
-  document.getElementById('deleteModal').classList.remove('show');
-  pendingDeleteId = null;
-  pendingDeleteBtn = null;
-}
-
-// Close modal on overlay click
-document.getElementById('deleteModal').addEventListener('click', function(e) {
-  if (e.target === this) closeDeleteModal();
-});
-
-// Close modal on Escape key
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeDeleteModal();
-});
-
-async function confirmDelete() {
-  if (!pendingDeleteId) return;
-  const btn = document.getElementById('modalConfirmBtn');
-  btn.disabled = true;
-  btn.textContent = 'Deleting…';
-  try {
-    const r = await fetch(`/api/documents/${pendingDeleteId}`, {method:'DELETE'});
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.detail);
-    closeDeleteModal();
-    showToast('Document deleted.');
-    loadDocuments();
-  } catch(e) {
-    showToast(e.message, 'error');
-    btn.disabled = false;
-    btn.textContent = 'Yes';
-  }
-}
-
-async function logout() {
-  await fetch('/api/auth/logout', {method:'POST'});
-  window.location.href = '/';
-}
-
-loadUser().then(loadDocuments);
-</script>
+  <!-- <script src="./dashboard.js"></script> -->
 </body>
+
 </html>
