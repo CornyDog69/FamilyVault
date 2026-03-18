@@ -10,7 +10,7 @@ from backend.database import users_col
 load_dotenv
 JWT_SECRET= os.getenv("JWT_SECRET","") # jwt-secret is the key set in .env via which server verifies token
 JWT_ALGORITHM="HS256" #  afixed widely used algo for jwt
-JWT_EXPIRE_HOURS=72
+JWT_EXPIRE_HOURS=1
 
 def create_access_token(email:str)-> str:
     payload={

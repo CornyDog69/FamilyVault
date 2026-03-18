@@ -116,7 +116,7 @@ let inactivityTimer;
 
 function resetInactivityTimer() {
     clearTimeout(inactivityTimer);
-    inactivityTimer = setTimeout(logout, 5 * 60 * 1000); // 5 mins
+    inactivityTimer = setTimeout(logout, 3 * 60 * 1000); // 5 mins
 }
 
 // Reset timer on any user interaction

@@ -44,7 +44,15 @@ async def verify_otp_endpoint(body:OTPVerifyRequest,response:Response):
     is_new= user is None
     if not is_new:
         token=create_access_token(email)
-        response.set_cookie(value=token,**COOKIE_SETTINGS)
+        response.set_cookie(
+            key="access_token",
+            value=token,
+            httponly=True,
+            secure=False,
+            samesite="lax",
+            max_age= 3600,
+            **COOKIE_SETTINGS,
+            )
     return {"message":"OTP verified","needs_username":is_new,"email":email}
 
 @router.post("/set-username")
