@@ -16,3 +16,23 @@ secure_docs/*.enc
 .vscode/
 .idea/
 *.DS_Store
+
+
+# Environment
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Encrypted document storage
+secure_docs/*.enc
+
+# IDE
+.vscode/
+.idea/
+*.DS_Store
