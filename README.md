@@ -4,7 +4,7 @@ A secure, private web application for storing and sharing important family PDF d
 
 ## Demonstration
 
-![Demonstration Video](demo.gif)
+<img src="demo.gif" alt="Demonstration Video" width="100%" autoplay loop />
 
 ---
 
@@ -35,7 +35,7 @@ cp .env.example .env
 ### 2. Install dependencies
 
 ```bash
-pip install -r requirements.txt
+pip install -r req.txt
 ```
 
 ### 3. Run locally
@@ -193,3 +193,8 @@ family-doc-vault/
 - **Security**: Encrypted documents are only decrypted on-the-fly per authenticated request; JWTs expire after 72 hours; OTPs are single‑use and expire after 5 minutes.
 
 ---
+
+## Authors
+
+- **Frontend:** [Prateek Priyanshu](https://github.com/p7xtxxk)
+- **Backend:** [Ishan Gupta](https://github.com/CornyDog69)
